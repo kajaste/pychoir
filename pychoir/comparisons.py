@@ -11,7 +11,7 @@ class EqualTo(Matcher):
         return bool(other == self.value)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.value!r})'
+        return f'{self.value!r}'
 
 
 EQ = EqualTo
@@ -25,7 +25,7 @@ class NotEqualTo(Matcher):
         return bool(other != self.value)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.value!r})'
+        return f'{self.value!r}'
 
 
 NE = NotEqualTo
@@ -39,7 +39,7 @@ class GreaterThan(Matcher):
         return bool(other > self.threshold)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.threshold!r})'
+        return f'{self.threshold!r}'
 
 
 GT = GreaterThan
@@ -53,7 +53,7 @@ class GreaterThanOrEqualTo(Matcher):
         return bool(other >= self.threshold)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.threshold!r})'
+        return f'{self.threshold!r}'
 
 
 GTE = GreaterThanOrEqualTo
@@ -67,7 +67,7 @@ class LesserThan(Matcher):
         return bool(other < self.threshold)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.threshold!r})'
+        return f'{self.threshold!r}'
 
 
 LT = LesserThan
@@ -81,7 +81,7 @@ class LesserThanOrEqualTo(Matcher):
         return bool(other <= self.threshold)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.threshold!r})'
+        return f'{self.threshold!r}'
 
 
 LTE = LesserThanOrEqualTo

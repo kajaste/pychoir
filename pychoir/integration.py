@@ -23,7 +23,7 @@ class Matches(Matcher):
         return any(matcher.matches(other) for matcher in self.matchers)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({", ".join(map(repr, self.matchers))})'
+        return f'{", ".join(map(repr, self.matchers))}'
 
 
 M = Matches

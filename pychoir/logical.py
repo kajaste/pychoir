@@ -11,7 +11,7 @@ class And(Matcher):
         return all(matcher == other for matcher in self.matchers)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({", ".join(map(repr, self.matchers))})'
+        return f'{", ".join(map(repr, self.matchers))}'
 
 
 AllOf = And
@@ -25,7 +25,7 @@ class Or(Matcher):
         return any(matcher == other for matcher in self.matchers)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({", ".join(map(repr, self.matchers))})'
+        return f'{", ".join(map(repr, self.matchers))}'
 
 
 AnyOf = Or
@@ -39,7 +39,7 @@ class Not(Matcher):
         return not any(matcher == other for matcher in self.matchers)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({", ".join(map(repr, self.matchers))})'
+        return f'{", ".join(map(repr, self.matchers))}'
 
 
 IsNoneOf = Not
@@ -53,4 +53,4 @@ class ResultsTrueFor(Matcher):
         return self.condition(other)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.condition!r})'
+        return f'{self.condition!r}'

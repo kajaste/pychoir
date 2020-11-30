@@ -14,12 +14,12 @@ from pychoir.logical import Not
 
 
 def test_anything():
-    assert [1] == [Anything]
-    assert [None] == [Anything]
-    assert [Ellipsis] == [Anything]
-    assert not [] == [Anything]
+    assert [1] == [Anything()]
+    assert [None] == [Anything()]
+    assert [Ellipsis] == [Anything()]
+    assert not [] == [Anything()]
 
-    assert str(Anything) == 'Anything'
+    assert str(Anything()) == 'Anything()'
 
 
 def test_is():
@@ -40,17 +40,17 @@ def test_is_none_or():
 
 
 def test_is_truthy():
-    assert [1, True, [0], {0}, {'': None}, (0,)] == All(IsTruthy)
-    assert [0, False, [], set(), {}, ()] == All(Not(IsTruthy))
+    assert [1, True, [0], {0}, {'': None}, (0,)] == All(IsTruthy())
+    assert [0, False, [], set(), {}, ()] == All(Not(IsTruthy()))
 
-    assert str(All(Not(IsTruthy))) == 'All(Not(IsTruthy))'
+    assert str(All(Not(IsTruthy()))) == 'All(Not(IsTruthy()))'
 
 
 def test_is_falsy():
-    assert [0, False, [], set(), {}, ()] == All(IsFalsy)
-    assert [1, True, [0], {0}, {'': None}, (0,)] == All(Not(IsFalsy))
+    assert [0, False, [], set(), {}, ()] == All(IsFalsy())
+    assert [1, True, [0], {0}, {'': None}, (0,)] == All(Not(IsFalsy()))
 
-    assert str(All(Not(IsFalsy))) == 'All(Not(IsFalsy))'
+    assert str(All(Not(IsFalsy()))) == 'All(Not(IsFalsy()))'
 
 
 def test_in():

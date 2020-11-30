@@ -3,15 +3,12 @@ from typing import Any, Iterable
 from pychoir.core import Matchable, Matcher
 
 
-class _Anything(Matcher):
+class Anything(Matcher):
     def matches(self, _: Any) -> bool:
         return True
 
     def description(self) -> str:
-        return 'Anything'
-
-
-Anything = _Anything()
+        return ''
 
 
 class Is(Matcher):
@@ -22,7 +19,7 @@ class Is(Matcher):
         return other is self.value
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.value!r})'
+        return f'{self.value!r}'
 
 
 class IsNoneOr(Matcher):
@@ -33,32 +30,26 @@ class IsNoneOr(Matcher):
         return other is None or any(other == matcher for matcher in self.matchers)
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({", ".join(map(repr, self.matchers))})'
+        return f'{", ".join(map(repr, self.matchers))}'
 
 
 Optionally = IsNoneOr
 
 
-class _IsTruthy(Matcher):
+class IsTruthy(Matcher):
     def matches(self, other: Any) -> bool:
         return bool(other)
 
     def description(self) -> str:
-        return 'IsTruthy'
+        return ''
 
 
-IsTruthy = _IsTruthy()
-
-
-class _IsFalsy(Matcher):
+class IsFalsy(Matcher):
     def matches(self, other: Any) -> bool:
         return not bool(other)
 
     def description(self) -> str:
-        return 'IsFalsy'
-
-
-IsFalsy = _IsFalsy()
+        return ''
 
 
 class In(Matcher):
@@ -70,7 +61,7 @@ class In(Matcher):
         return other in self.allowed_values_set
 
     def description(self) -> str:
-        return f'{self.__class__.__name__}({self.allowed_values!r})'
+        return f'{self.allowed_values!r}'
 
 
 OneOf = In

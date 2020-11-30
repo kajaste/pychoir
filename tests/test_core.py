@@ -24,7 +24,7 @@ def test_matcher():
             return self.does_match
 
         def description(self) -> str:
-            return f'{self.__class__.__name__}(does_match={self.does_match})'
+            return f'does_match={self.does_match}'
 
     true_matcher = TestMatcher(True)
     false_matcher = TestMatcher(False)
@@ -51,7 +51,7 @@ if sys.version_info >= (3, 7):
             i: int
             ldsb: List[Dict[str, bool]]
 
-        assert Data(1, [{'foo': True}]) == Data(IsInstance(int).as_(int), [{'foo': IsTruthy.as_(bool)}])
+        assert Data(1, [{'foo': True}]) == Data(IsInstance(int).as_(int), [{'foo': IsTruthy().as_(bool)}])
 
-        assert (str(Data(IsInstance(int).as_(int), [{'foo': IsTruthy.as_(bool)}]))
-                == "test_matcher_in_dataclass.<locals>.Data(i=IsInstance(int), ldsb=[{'foo': IsTruthy}])")
+        assert (str(Data(IsInstance(int).as_(int), [{'foo': IsTruthy().as_(bool)}]))
+                == "test_matcher_in_dataclass.<locals>.Data(i=IsInstance(int), ldsb=[{'foo': IsTruthy()}])")
