@@ -17,12 +17,13 @@ else:
 
 class Matches(Matcher):
     def __init__(self, *matchers: MatcherLike[T]):
+        super().__init__()
         self.matchers = matchers
 
-    def matches(self, other: T) -> bool:
+    def _matches(self, other: T) -> bool:
         return any(matcher.matches(other) for matcher in self.matchers)
 
-    def description(self) -> str:
+    def _description(self) -> str:
         return f'{", ".join(map(repr, self.matchers))}'
 
 

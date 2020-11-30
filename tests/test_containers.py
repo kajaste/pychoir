@@ -58,7 +58,7 @@ def test_contains_none_of():
     assert str([ContainsNoneOf('5', '3', '1')]) == "[ContainsNoneOf('5', '3', '1')]"
 
 
-def test_dict_contains_at_least():
+def test_dict_contains_all_of():
     test_input = {'a': [1, 2, 3], 'b': 4, 'c': 'extra'}
     dict_to_match = {'a': And(HasLength(3), All(IsInstance(int))), 'b': 4}
     assert not test_input == dict_to_match
