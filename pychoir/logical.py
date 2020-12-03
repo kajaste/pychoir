@@ -12,7 +12,7 @@ class And(Matcher):
         return all(Matcher.nested_match(matcher, other) for matcher in self.matchers)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.matchers))}'
+        return ', '.join(map(repr, self.matchers))
 
 
 AllOf = And
@@ -27,7 +27,7 @@ class Or(Matcher):
         return any(Matcher.nested_match(matcher, other) for matcher in self.matchers)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.matchers))}'
+        return ', '.join(map(repr, self.matchers))
 
 
 AnyOf = Or
@@ -42,7 +42,7 @@ class Not(Matcher):
         return all(Matcher.nested_match(matcher, other, inverse=True) for matcher in self.matchers)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.matchers))}'
+        return ', '.join(map(repr, self.matchers))
 
 
 IsNoneOf = Not
@@ -57,4 +57,4 @@ class ResultsTrueFor(Matcher):
         return self.condition(other)
 
     def _description(self) -> str:
-        return f'{self.condition!r}'
+        return repr(self.condition)

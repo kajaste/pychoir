@@ -12,7 +12,7 @@ class EqualTo(Matcher):
         return bool(other == self.value)
 
     def _description(self) -> str:
-        return f'{self.value!r}'
+        return repr(self.value)
 
 
 EQ = EqualTo
@@ -27,7 +27,7 @@ class NotEqualTo(Matcher):
         return bool(other != self.value)
 
     def _description(self) -> str:
-        return f'{self.value!r}'
+        return repr(self.value)
 
 
 NE = NotEqualTo
@@ -42,7 +42,7 @@ class GreaterThan(Matcher):
         return bool(other > self.threshold)
 
     def _description(self) -> str:
-        return f'{self.threshold!r}'
+        return repr(self.threshold)
 
 
 GT = GreaterThan
@@ -57,7 +57,7 @@ class GreaterThanOrEqualTo(Matcher):
         return bool(other >= self.threshold)
 
     def _description(self) -> str:
-        return f'{self.threshold!r}'
+        return repr(self.threshold)
 
 
 GTE = GreaterThanOrEqualTo
@@ -72,7 +72,7 @@ class LesserThan(Matcher):
         return bool(other < self.threshold)
 
     def _description(self) -> str:
-        return f'{self.threshold!r}'
+        return repr(self.threshold)
 
 
 LT = LesserThan
@@ -87,7 +87,7 @@ class LesserThanOrEqualTo(Matcher):
         return bool(other <= self.threshold)
 
     def _description(self) -> str:
-        return f'{self.threshold!r}'
+        return repr(self.threshold)
 
 
 LTE = LesserThanOrEqualTo

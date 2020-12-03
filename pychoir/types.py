@@ -12,7 +12,7 @@ class IsInstance(Matcher):
         return isinstance(other, self.type)
 
     def _description(self) -> str:
-        return f'{self.type.__name__}'
+        return self.type.__name__
 
 
 OfType = IsInstance

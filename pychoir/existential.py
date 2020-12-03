@@ -20,7 +20,7 @@ class Is(Matcher):
         return other is self.value
 
     def _description(self) -> str:
-        return f'{self.value!r}'
+        return repr(self.value)
 
 
 class IsNoneOr(Matcher):
@@ -32,7 +32,7 @@ class IsNoneOr(Matcher):
         return other is None or any(Matcher.nested_match(matcher, other) for matcher in self.matchers)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.matchers))}'
+        return ', '.join(map(repr, self.matchers))
 
 
 Optionally = IsNoneOr
@@ -63,7 +63,7 @@ class In(Matcher):
         return other in self.allowed_values
 
     def _description(self) -> str:
-        return f'{self.allowed_values!r}'
+        return repr(self.allowed_values)
 
 
 OneOf = In

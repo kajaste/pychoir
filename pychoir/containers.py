@@ -22,7 +22,7 @@ class HasLength(Matcher):
         return Matcher.nested_match(self.matcher, len(other))
 
     def _description(self) -> str:
-        return f'{repr(self.matcher)}'
+        return repr(self.matcher)
 
 
 Len = HasLength
@@ -37,7 +37,7 @@ class All(Matcher):
         return all(Matcher.nested_match(matcher, value) for value in iterable for matcher in self.matchers)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.matchers))}'
+        return ', '.join(map(repr, self.matchers))
 
 
 class AreNot(Matcher):
@@ -50,7 +50,7 @@ class AreNot(Matcher):
                    for value in iterable for matcher in self.matchers)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.matchers))}'
+        return ', '.join(map(repr, self.matchers))
 
 
 class ContainsAllOf(Matcher):
@@ -62,7 +62,7 @@ class ContainsAllOf(Matcher):
         return all(value in other for value in self.values)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.values))}'
+        return ', '.join(map(repr, self.values))
 
 
 class ContainsAnyOf(Matcher):
@@ -74,7 +74,7 @@ class ContainsAnyOf(Matcher):
         return any(value in other for value in self.values)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.values))}'
+        return ', '.join(map(repr, self.values))
 
 
 class ContainsNoneOf(Matcher):
@@ -86,7 +86,7 @@ class ContainsNoneOf(Matcher):
         return not any(value in other for value in self.values)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.values))}'
+        return ', '.join(map(repr, self.values))
 
 
 class DictContainsAllOf(Matcher):
@@ -98,4 +98,4 @@ class DictContainsAllOf(Matcher):
         return self.dict == {key: value for key, value in other.items() if key in self.dict}
 
     def _description(self) -> str:
-        return f'{self.dict!r}'
+        return repr(self.dict)

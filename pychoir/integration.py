@@ -24,7 +24,7 @@ class Matches(Matcher):
         return any(matcher.matches(other) for matcher in self.matchers)
 
     def _description(self) -> str:
-        return f'{", ".join(map(repr, self.matchers))}'
+        return ', '.join(map(repr, self.matchers))
 
 
 M = Matches
