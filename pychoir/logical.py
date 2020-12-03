@@ -49,12 +49,12 @@ IsNoneOf = Not
 
 
 class ResultsTrueFor(Matcher):
-    def __init__(self, condition: Callable[[Any], bool]):
+    def __init__(self, *conditions: Callable[[Any], bool]):
         super().__init__()
-        self.condition = condition
+        self.conditions = conditions
 
     def _matches(self, other: Any) -> bool:
-        return self.condition(other)
+        return all(condition(other) for condition in self.conditions)
 
     def _description(self) -> str:
-        return repr(self.condition)
+        return ', '.join(map(repr, self.conditions))
