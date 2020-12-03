@@ -1,16 +1,17 @@
-from pychoir.comparisons import LTE, GreaterThan
-from pychoir.containers import (
+from pychoir import (
+    LTE,
     All,
+    And,
     AreNot,
     ContainsAllOf,
     ContainsAnyOf,
     ContainsNoneOf,
     DictContainsAllOf,
+    GreaterThan,
     HasLength,
+    IsInstance,
     Len,
 )
-from pychoir.logical import And
-from pychoir.types import IsInstance
 
 
 def test_has_length():

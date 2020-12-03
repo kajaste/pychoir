@@ -4,9 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from pychoir.core import Matchable, Matcher
-from pychoir.existential import IsTruthy
-from pychoir.types import IsInstance
+from pychoir import IsInstance, IsTruthy, Matchable, Matcher
 
 
 def test_matchable():

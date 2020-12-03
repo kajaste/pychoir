@@ -63,7 +63,7 @@ class GreaterThanOrEqualTo(Matcher):
 GTE = GreaterThanOrEqualTo
 
 
-class LesserThan(Matcher):
+class LessThan(Matcher):
     def __init__(self, threshold: Any):
         super().__init__()
         self.threshold = threshold
@@ -75,10 +75,10 @@ class LesserThan(Matcher):
         return repr(self.threshold)
 
 
-LT = LesserThan
+LT = LessThan
 
 
-class LesserThanOrEqualTo(Matcher):
+class LessThanOrEqualTo(Matcher):
     def __init__(self, threshold: Any):
         super().__init__()
         self.threshold = threshold
@@ -90,4 +90,4 @@ class LesserThanOrEqualTo(Matcher):
         return repr(self.threshold)
 
 
-LTE = LesserThanOrEqualTo
+LTE = LessThanOrEqualTo

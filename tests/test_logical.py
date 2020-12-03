@@ -1,7 +1,15 @@
-from pychoir.comparisons import GreaterThan
-from pychoir.containers import HasLength
-from pychoir.logical import AllOf, And, AnyOf, IsNoneOf, Not, Or, ResultsTrueFor
-from pychoir.types import IsInstance
+from pychoir import (
+    AllOf,
+    And,
+    AnyOf,
+    GreaterThan,
+    HasLength,
+    IsInstance,
+    IsNoneOf,
+    Not,
+    Or,
+    ResultsTrueFor,
+)
 
 
 def test_and():

@@ -1,4 +1,4 @@
-from pychoir.types import IsInstance, OfType
+from pychoir import IsInstance, OfType
 
 
 def test_is_instance():

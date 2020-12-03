@@ -1,6 +1,6 @@
 from typing import Any, Optional, TypeVar
 
-from pychoir.integration import M, Matches
+from pychoir import M, Matches
 
 T = TypeVar('T')
 

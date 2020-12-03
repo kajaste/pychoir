@@ -1,16 +1,17 @@
-from pychoir.comparisons import EqualTo, LesserThan
-from pychoir.containers import All
-from pychoir.existential import (
+from pychoir import (
+    All,
     Anything,
+    EqualTo,
     In,
     Is,
     IsFalsy,
     IsNoneOr,
     IsTruthy,
+    LessThan,
+    Not,
     OneOf,
     Optionally,
 )
-from pychoir.logical import Not
 
 
 def test_anything():
@@ -33,7 +34,7 @@ def test_is():
 def test_is_none_or():
     assert Optionally is IsNoneOr
     assert [None, 1] == All(Optionally(1))
-    assert [None, 1] == [IsNoneOr(1), IsNoneOr(LesserThan(0), EqualTo(1))]
+    assert [None, 1] == [IsNoneOr(1), IsNoneOr(LessThan(0), EqualTo(1))]
     assert not [2] == [IsNoneOr(1)]
 
     assert str([IsNoneOr('1')]) == "[IsNoneOr('1')]"

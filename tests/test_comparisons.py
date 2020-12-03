@@ -1,4 +1,4 @@
-from pychoir.comparisons import (
+from pychoir import (
     EQ,
     GT,
     GTE,
@@ -8,8 +8,8 @@ from pychoir.comparisons import (
     EqualTo,
     GreaterThan,
     GreaterThanOrEqualTo,
-    LesserThan,
-    LesserThanOrEqualTo,
+    LessThan,
+    LessThanOrEqualTo,
     NotEqualTo,
 )
 
@@ -55,20 +55,20 @@ def test_greater_than_or_equal_to():
 
 
 def test_lesser_than():
-    assert LT is LesserThan
+    assert LT is LessThan
 
-    assert [0] == [LesserThan(1)]
-    assert {'a': 0} == {'a': LesserThan(1)}
-    assert not [0] == [LesserThan(0)]
+    assert [0] == [LessThan(1)]
+    assert {'a': 0} == {'a': LessThan(1)}
+    assert not [0] == [LessThan(0)]
 
-    assert str(LesserThan(2)) == 'LesserThan(2)'
+    assert str(LessThan(2)) == 'LessThan(2)'
 
 
 def test_lesser_than_or_equal_to():
-    assert LTE is LesserThanOrEqualTo
+    assert LTE is LessThanOrEqualTo
 
-    assert [0, 1] == [LesserThanOrEqualTo(1), LesserThanOrEqualTo(1)]
-    assert {'a': 0} == {'a': LesserThanOrEqualTo(0)}
-    assert not [0] == [LesserThanOrEqualTo(-1)]
+    assert [0, 1] == [LessThanOrEqualTo(1), LessThanOrEqualTo(1)]
+    assert {'a': 0} == {'a': LessThanOrEqualTo(0)}
+    assert not [0] == [LessThanOrEqualTo(-1)]
 
-    assert str(LesserThanOrEqualTo(-1)) == 'LesserThanOrEqualTo(-1)'
+    assert str(LessThanOrEqualTo(-1)) == 'LessThanOrEqualTo(-1)'
