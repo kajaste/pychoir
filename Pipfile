@@ -13,6 +13,9 @@ pytest = "*"
 pytest-cov = "*"
 tox = "*"
 sphinx = "*"
+twine = "*"
+setuptools = "*"
+wheel = "*"
 
 [requires]
 python_version = "3.8"
