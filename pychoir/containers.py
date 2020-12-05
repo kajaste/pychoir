@@ -92,10 +92,33 @@ class ContainsNoneOf(Matcher):
 class DictContainsAllOf(Matcher):
     def __init__(self, value: Mapping[Any, Any]):
         super().__init__()
-        self.dict = value
+        self.expected = value
 
     def _matches(self, other: Mapping[Any, Any]) -> bool:
-        return self.dict == {key: value for key, value in other.items() if key in self.dict}
+        match_dict = {key: value for key, value in other.items() if key in self.expected}
+        for key in self.expected:
+            if key not in match_dict:
+                match_dict[key] = NotPresent
+        return self.expected == match_dict
 
     def _description(self) -> str:
-        return repr(self.dict)
+        return repr(self.expected)
+
+
+class _NotPresent:
+    pass
+
+
+NotPresent = _NotPresent()
+
+
+class IsNotPresentOr(Matcher):
+    def __init__(self, *matchers: Matchable):
+        super().__init__()
+        self.matchers = matchers
+
+    def _matches(self, other: Any) -> bool:
+        return other is NotPresent or any(matcher == other for matcher in self.matchers)
+
+    def _description(self) -> str:
+        return ', '.join(map(repr, self.matchers))

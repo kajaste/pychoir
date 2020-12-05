@@ -20,7 +20,9 @@ from .containers import (  # noqa: F401
     ContainsNoneOf,
     DictContainsAllOf,
     HasLength,
+    IsNotPresentOr,
     Len,
+    NotPresent,
 )
 from .core import Matchable, Matcher  # noqa: F401
 from .existential import (  # noqa: F401

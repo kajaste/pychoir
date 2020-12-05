@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from pychoir import (
     LTE,
     All,
@@ -10,7 +12,10 @@ from pychoir import (
     GreaterThan,
     HasLength,
     IsInstance,
+    IsNotPresentOr,
     Len,
+    Matcher,
+    NotPresent,
 )
 
 
@@ -61,12 +66,31 @@ def test_contains_none_of():
 
 def test_dict_contains_all_of():
     test_input = {'a': [1, 2, 3], 'b': 4, 'c': 'extra'}
-    dict_to_match = {'a': And(HasLength(3), All(IsInstance(int))), 'b': 4}
-    assert not test_input == dict_to_match
-    assert test_input == DictContainsAllOf(dict_to_match)
+
+    def dict_to_match() -> Dict[Any, Any]:
+        return {'a': And(HasLength(3), All(IsInstance(int))), 'b': 4, 'd': NotPresent}
+
+    assert not test_input == dict_to_match()
+    assert test_input == DictContainsAllOf(dict_to_match())
 
     assert not test_input == DictContainsAllOf({'a': [1]})
-    assert not test_input == DictContainsAllOf({'a': [1, 2, 3], 'b': 4, 'c': 'extra', 'd': 'not there'})
+    assert not test_input == DictContainsAllOf({'a': [1, 2, 3], 'b': 4, 'c': 'extra', 'e': 'not there'})
 
     assert (str(DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4}))
             == "DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4})")
+
+
+def test_is_not_present_or():
+    with_a = {'a': 1, 'b': 2, 'c': 'whatever'}
+    without_a = {'b': 2, 'c': 'whatever'}
+
+    def matcher() -> Matcher:
+        return DictContainsAllOf({'a': IsNotPresentOr(1), 'b': 2})
+
+    assert with_a == matcher()
+    assert without_a == matcher()
+
+    assert {'a': 2, 'b': 2} != matcher()
+    assert {'b': 1} != matcher()
+
+    assert str(matcher()) == "DictContainsAllOf({'a': IsNotPresentOr(1), 'b': 2})"
