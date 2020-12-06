@@ -1,7 +1,7 @@
 # PyChoir - Python Test Matchers for humans
 [![PyPI version](https://badge.fury.io/py/pychoir.svg)](https://badge.fury.io/py/pychoir)
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pychoir.svg)](https://pypi.python.org/pypi/pychoir/)
-[![GitHub Actions (Tests)](https://github.com/kajaste/pychoir/workflows/Python package/badge.svg)](https://github.com/kajaste/pychoir)
+[![GitHub Actions (Tests)](https://github.com/Kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
 
 Super duper low cognitive overhead matching for Python developers reading or writing tests. Implemented in pure Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8 and 3.9. PyPy (3.6, 3.7) works fine too.
 
