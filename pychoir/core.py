@@ -91,9 +91,13 @@ class Matcher(ABC):
         """To make matchers pass type checking"""
         return self  # type: ignore
 
-    @staticmethod
     @final
-    def nested_match(matcher: Union['Matcher', Matchable], other: MatchedType, inverse: bool = False) -> bool:
+    def nested_match(
+        self,
+        matcher: Union['Matcher', Matchable],
+        other: MatchedType,
+        inverse: bool = False
+    ) -> bool:
         """For calling Matchers from inside Matchers"""
         if isinstance(matcher, Matcher):
             return matcher.matches(other, _MatcherContext(inverse_match=inverse, nested_call=True))

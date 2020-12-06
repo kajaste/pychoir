@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from pychoir import IsInstance, IsTruthy, Matchable, Matcher
+from pychoir import Anything, IsInstance, IsTruthy, Matchable, Matcher
 
 
 def test_matchable():
@@ -55,26 +55,26 @@ class TestMatcher:
     def test_nested_match(self):
         matching_matcher = self._TestMatcher(True)
         assert str(matching_matcher) == '_TestMatcher(does_match=True)'
-        assert Matcher.nested_match(matching_matcher, 1)
+        assert Anything().nested_match(matching_matcher, 1)
         assert str(matching_matcher) == '_TestMatcher(does_match=True)'
-        assert not Matcher.nested_match(matching_matcher, 1, inverse=True)
+        assert not Anything().nested_match(matching_matcher, 1, inverse=True)
         assert str(matching_matcher) == '_TestMatcher(does_match=True)[FAILED for 1]'
-        assert not Matcher.nested_match(matching_matcher, 2, inverse=True)
+        assert not Anything().nested_match(matching_matcher, 2, inverse=True)
         assert str(matching_matcher) == '_TestMatcher(does_match=True)[FAILED for (1, 2)]'
 
         mismatching_matcher = self._TestMatcher(False)
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)'
-        assert Matcher.nested_match(mismatching_matcher, 3, inverse=True)
+        assert Anything().nested_match(mismatching_matcher, 3, inverse=True)
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)'
-        assert not Matcher.nested_match(mismatching_matcher, 3)
+        assert not Anything().nested_match(mismatching_matcher, 3)
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)[FAILED for 3]'
-        assert not Matcher.nested_match(mismatching_matcher, 4)
+        assert not Anything().nested_match(mismatching_matcher, 4)
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)[FAILED for (3, 4)]'
 
-        assert Matcher.nested_match(1, 1)
-        assert not Matcher.nested_match(1, 1, inverse=True)
-        assert not Matcher.nested_match(1, 2)
-        assert Matcher.nested_match(1, 2, inverse=True)
+        assert Anything().nested_match(1, 1)
+        assert not Anything().nested_match(1, 1, inverse=True)
+        assert not Anything().nested_match(1, 2)
+        assert Anything().nested_match(1, 2, inverse=True)
 
     @patch('warnings.warn')
     def test_warn_when_reusing(self, warn_mock: MagicMock) -> None:
@@ -89,9 +89,9 @@ class TestMatcher:
     @patch('warnings.warn')
     def test_nested_match_allows_reuse(self, warn_mock: MagicMock) -> None:
         instance = self._TestMatcher(True)
-        assert Matcher.nested_match(instance, 1)
+        assert Anything().nested_match(instance, 1)
         warn_mock.assert_not_called()
-        assert Matcher.nested_match(instance, 2)
+        assert Anything().nested_match(instance, 2)
         warn_mock.assert_not_called()
 
 

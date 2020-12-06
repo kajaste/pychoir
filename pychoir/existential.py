@@ -29,7 +29,7 @@ class IsNoneOr(Matcher):
         self.matchers = matchers
 
     def _matches(self, other: Any) -> bool:
-        return other is None or any(Matcher.nested_match(matcher, other) for matcher in self.matchers)
+        return other is None or any(self.nested_match(matcher, other) for matcher in self.matchers)
 
     def _description(self) -> str:
         return ', '.join(map(repr, self.matchers))

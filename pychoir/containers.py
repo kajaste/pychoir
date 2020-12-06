@@ -19,7 +19,7 @@ class HasLength(Matcher):
         self.matcher = matcher
 
     def _matches(self, other: Lengthy) -> bool:
-        return Matcher.nested_match(self.matcher, len(other))
+        return self.nested_match(self.matcher, len(other))
 
     def _description(self) -> str:
         return repr(self.matcher)
@@ -34,7 +34,7 @@ class All(Matcher):
         self.matchers = matchers
 
     def _matches(self, iterable: Iterable[Any]) -> bool:
-        return all(Matcher.nested_match(matcher, value) for value in iterable for matcher in self.matchers)
+        return all(self.nested_match(matcher, value) for value in iterable for matcher in self.matchers)
 
     def _description(self) -> str:
         return ', '.join(map(repr, self.matchers))
@@ -46,7 +46,7 @@ class AreNot(Matcher):
         self.matchers = matchers
 
     def _matches(self, iterable: Iterable[Any]) -> bool:
-        return all(Matcher.nested_match(matcher, value, inverse=True)
+        return all(self.nested_match(matcher, value, inverse=True)
                    for value in iterable for matcher in self.matchers)
 
     def _description(self) -> str:
