@@ -57,14 +57,14 @@ class TestMatcher:
         assert str(matching_matcher) == '_TestMatcher(does_match=True)'
         assert Anything().nested_match(matching_matcher, 1)
         assert str(matching_matcher) == '_TestMatcher(does_match=True)'
-        assert not Anything().nested_match(matching_matcher, 1, inverse=True)
+        assert Anything().nested_match(matching_matcher, 1, expect_mismatch=True)
         assert str(matching_matcher) == '_TestMatcher(does_match=True)[FAILED for 1]'
-        assert not Anything().nested_match(matching_matcher, 2, inverse=True)
+        assert Anything().nested_match(matching_matcher, 2, expect_mismatch=True)
         assert str(matching_matcher) == '_TestMatcher(does_match=True)[FAILED for (1, 2)]'
 
         mismatching_matcher = self._TestMatcher(False)
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)'
-        assert Anything().nested_match(mismatching_matcher, 3, inverse=True)
+        assert not Anything().nested_match(mismatching_matcher, 3, expect_mismatch=True)
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)'
         assert not Anything().nested_match(mismatching_matcher, 3)
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)[FAILED for 3]'
@@ -72,9 +72,9 @@ class TestMatcher:
         assert str(mismatching_matcher) == '_TestMatcher(does_match=False)[FAILED for (3, 4)]'
 
         assert Anything().nested_match(1, 1)
-        assert not Anything().nested_match(1, 1, inverse=True)
+        assert Anything().nested_match(1, 1, expect_mismatch=True)
         assert not Anything().nested_match(1, 2)
-        assert Anything().nested_match(1, 2, inverse=True)
+        assert not Anything().nested_match(1, 2, expect_mismatch=True)
 
     @patch('warnings.warn')
     def test_warn_when_reusing(self, warn_mock: MagicMock) -> None:

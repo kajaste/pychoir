@@ -1,7 +1,13 @@
+from contextlib import contextmanager
+from typing import Iterator
+from unittest.mock import patch
+
 from pychoir import (
+    NE,
     AllOf,
     And,
     AnyOf,
+    EqualTo,
     GreaterThan,
     HasLength,
     IsInstance,
@@ -40,6 +46,156 @@ def test_not():
     assert not [1] == [IsNoneOf(0, 1, 2)]
 
     assert str([Not(0, 1, 2)]) == '[Not(0, 1, 2)]'
+
+
+def test_not_or():
+    @contextmanager
+    def make_not_or_123() -> Iterator[Not]:
+        yield Not(Or(EqualTo(1), 2, 3))
+
+    with make_not_or_123() as not_or_123:
+        assert 4 == not_or_123
+        assert str(not_or_123) == 'Not(Or(EqualTo(1), 2, 3))'
+
+    with make_not_or_123() as not_or_123:
+        assert not 4 != not_or_123
+        assert str(not_or_123) == 'Not(Or(EqualTo(1)[FAILED for 4], 2, 3)[FAILED for 4])[FAILED for 4]'
+
+    with make_not_or_123() as not_or_123:
+        with patch('warnings.warn'):  # Suppress warnings from using the same matcher many times
+            for i in (1, 2, 3):
+                assert i != not_or_123
+        assert str(not_or_123) == 'Not(Or(EqualTo(1)[FAILED for (2, 3)], 2, 3))'
+
+    with make_not_or_123() as not_or_123:
+        with patch('warnings.warn'):  # Suppress warnings from using the same matcher many times
+            for i in (1, 2, 3):
+                assert not i == not_or_123
+        assert str(not_or_123) == 'Not(Or(EqualTo(1)[FAILED for 1], 2, 3)[FAILED for (1, 2, 3)])[FAILED for (1, 2, 3)]'
+
+
+def test_not_not():
+    @contextmanager
+    def make_not_one() -> Iterator[Not]:
+        yield Not(1)
+
+    with make_not_one() as not_one:
+        assert 2 == not_one
+        assert str(not_one) == 'Not(1)'
+
+    with make_not_one() as not_one:
+        assert 1 != not_one
+        assert str(not_one) == 'Not(1)'
+
+    with make_not_one() as not_one:
+        assert not 2 != not_one
+        assert str(not_one) == 'Not(1)[FAILED for 2]'
+
+    with make_not_one() as not_one:
+        assert not 1 == not_one
+        assert str(not_one) == 'Not(1)[FAILED for 1]'
+
+    @contextmanager
+    def make_not_eq_one() -> Iterator[Not]:
+        yield Not(EqualTo(1))
+
+    with make_not_eq_one() as not_eq_one:
+        assert 2 == not_eq_one
+        assert str(not_eq_one) == 'Not(EqualTo(1))'
+
+    with make_not_eq_one() as not_eq_one:
+        assert 1 != not_eq_one
+        assert str(not_eq_one) == 'Not(EqualTo(1))'
+
+    with make_not_eq_one() as not_eq_one:
+        assert not 2 != not_eq_one
+        assert str(not_eq_one) == 'Not(EqualTo(1)[FAILED for 2])[FAILED for 2]'
+
+    with make_not_eq_one() as not_eq_one:
+        assert not 1 == not_eq_one
+        assert str(not_eq_one) == 'Not(EqualTo(1)[FAILED for 1])[FAILED for 1]'
+
+    @contextmanager
+    def make_not_not_one() -> Iterator[Not]:
+        yield Not(Not(1))
+
+    with make_not_not_one() as not_not_one:
+        assert 1 == not_not_one
+        assert str(not_not_one) == 'Not(Not(1))'
+
+    with make_not_not_one() as not_not_one:
+        assert 2 != not_not_one
+        assert str(not_not_one) == 'Not(Not(1))'
+
+    with make_not_not_one() as not_not_one:
+        assert not 1 != not_not_one
+        assert str(not_not_one) == 'Not(Not(1)[FAILED for 1])[FAILED for 1]'
+
+    with make_not_not_one() as not_not_one:
+        assert not 2 == not_not_one
+        assert str(not_not_one) == 'Not(Not(1)[FAILED for 2])[FAILED for 2]'
+
+    @contextmanager
+    def make_not_ne_one() -> Iterator[Not]:
+        yield Not(NE(1))
+
+    with make_not_ne_one() as not_ne_one:
+        assert 1 == not_ne_one
+        assert str(not_ne_one) == 'Not(NotEqualTo(1))'
+
+    with make_not_ne_one() as not_ne_one:
+        assert 2 != not_ne_one
+        assert str(not_ne_one) == 'Not(NotEqualTo(1))'
+
+    with make_not_ne_one() as not_ne_one:
+        assert not 1 != not_ne_one
+        assert str(not_ne_one) == 'Not(NotEqualTo(1)[FAILED for 1])[FAILED for 1]'
+
+    with make_not_ne_one() as not_ne_one:
+        assert not 2 == not_ne_one
+        assert str(not_ne_one) == 'Not(NotEqualTo(1)[FAILED for 2])[FAILED for 2]'
+
+    @contextmanager
+    def make_not_not_eq_one() -> Iterator[Not]:
+        yield Not(Not(EqualTo(1)))
+
+    with make_not_not_eq_one() as not_not_eq_one:
+        assert 1 == not_not_eq_one
+        assert str(not_not_eq_one) == 'Not(Not(EqualTo(1)))'
+
+    with make_not_not_eq_one() as not_not_eq_one:
+        assert 2 != not_not_eq_one
+        assert str(not_not_eq_one) == 'Not(Not(EqualTo(1)))'
+
+    with make_not_not_eq_one() as not_not_eq_one:
+        assert not 1 != not_not_eq_one
+        assert str(not_not_eq_one) == 'Not(Not(EqualTo(1)[FAILED for 1])[FAILED for 1])[FAILED for 1]'
+
+    with make_not_not_eq_one() as not_not_eq_one:
+        assert not 2 == not_not_eq_one
+        assert str(not_not_eq_one) == 'Not(Not(EqualTo(1)[FAILED for 2])[FAILED for 2])[FAILED for 2]'
+
+    @contextmanager
+    def make_not_not_eq_one_eq_two() -> Iterator[Not]:
+        yield Not(Not(EqualTo(1), EqualTo(2)))
+
+    with make_not_not_eq_one_eq_two() as not_not_eq_one_eq_two:
+        assert 1 == not_not_eq_one_eq_two
+        assert str(not_not_eq_one_eq_two) == 'Not(Not(EqualTo(1), EqualTo(2)))'
+
+    with make_not_not_eq_one_eq_two() as not_not_eq_one_eq_two:
+        assert not 2 != not_not_eq_one_eq_two
+        assert (str(not_not_eq_one_eq_two)
+                == 'Not(Not(EqualTo(1), EqualTo(2)[FAILED for 2])[FAILED for 2])[FAILED for 2]')
+
+    with make_not_not_eq_one_eq_two() as not_not_eq_one_eq_two:
+        assert not 1 != not_not_eq_one_eq_two
+        assert (str(not_not_eq_one_eq_two)
+                == 'Not(Not(EqualTo(1)[FAILED for 1], EqualTo(2))[FAILED for 1])[FAILED for 1]')
+
+    with make_not_not_eq_one_eq_two() as not_not_eq_one_eq_two:
+        assert 2 == not_not_eq_one_eq_two
+        assert str(not_not_eq_one_eq_two) == 'Not(Not(EqualTo(1)[FAILED for 2], EqualTo(2)))'
 
 
 def test_results_true_for():

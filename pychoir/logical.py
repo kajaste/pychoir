@@ -39,7 +39,7 @@ class Not(Matcher):
         self.matchers = matchers
 
     def _matches(self, other: Any) -> bool:
-        return all(self.nested_match(matcher, other, inverse=True) for matcher in self.matchers)
+        return not any(self.nested_match(matcher, other, expect_mismatch=True) for matcher in self.matchers)
 
     def _description(self) -> str:
         return ', '.join(map(repr, self.matchers))

@@ -46,8 +46,8 @@ class AreNot(Matcher):
         self.matchers = matchers
 
     def _matches(self, iterable: Iterable[Any]) -> bool:
-        return all(self.nested_match(matcher, value, inverse=True)
-                   for value in iterable for matcher in self.matchers)
+        return not any(self.nested_match(matcher, value, expect_mismatch=True)
+                       for value in iterable for matcher in self.matchers)
 
     def _description(self) -> str:
         return ', '.join(map(repr, self.matchers))
