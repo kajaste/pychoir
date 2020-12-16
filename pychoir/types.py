@@ -16,3 +16,18 @@ class IsInstance(Matcher):
 
 
 OfType = IsInstance
+
+
+class ConvertsTo(Matcher):
+    def __init__(self, type_: Type[Any]):
+        super().__init__()
+        self.type = type_
+
+    def _matches(self, other: Any) -> bool:
+        try:
+            return isinstance(self.type(other), self.type)
+        except:  # noqa: E722
+            return False
+
+    def _description(self) -> str:
+        return self.type.__name__
