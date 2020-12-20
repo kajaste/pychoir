@@ -1,8 +1,9 @@
 import sys
 import warnings
 from abc import ABC, abstractmethod
+from contextlib import contextmanager
 from enum import Enum
-from typing import Any, Callable, List, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, Iterator, List, Optional, Tuple, Type, TypeVar, Union
 
 from pychoir.utils import sequence_or_its_only_member
 
@@ -69,13 +70,13 @@ class _MatcherState:
 
 
 class _MatcherContext:
-    def __init__(self, inverse_match: bool, nested_call: bool) -> None:
-        self.__inverse_match = inverse_match
+    def __init__(self, mismatch_expected: bool, nested_call: bool) -> None:
+        self.__mismatch_expected = mismatch_expected
         self.__nested_call = nested_call
 
     @property
-    def inverse_match(self) -> bool:
-        return self.__inverse_match
+    def mismatch_expected(self) -> bool:
+        return self.__mismatch_expected
 
     @property
     def nested_call(self) -> bool:
@@ -86,6 +87,7 @@ class Matcher(ABC):
     def __init__(self) -> None:
         super().__init__()
         self.__state = _MatcherState()
+        self.__context: Optional[_MatcherContext] = None
 
     def as_(self, _: Type[T]) -> T:
         """To make matchers pass type checking"""
@@ -96,13 +98,14 @@ class Matcher(ABC):
         self,
         matcher: Union['Matcher', Matchable],
         other: MatchedType,
-        inverse: bool = False
+        expect_mismatch: bool = False
     ) -> bool:
         """For calling Matchers from inside Matchers"""
+        if self.__context is not None and self.__context.mismatch_expected:
+            expect_mismatch = not expect_mismatch
+
         if isinstance(matcher, Matcher):
-            return matcher.matches(other, _MatcherContext(inverse_match=inverse, nested_call=True))
-        if inverse:
-            return matcher != other
+            return matcher.matches(other, _MatcherContext(mismatch_expected=expect_mismatch, nested_call=True))
         else:
             return matcher == other
 
@@ -116,24 +119,24 @@ class Matcher(ABC):
 
     @final
     def matches(self, other: MatchedType, context: _MatcherContext) -> bool:
-        passed = self._matches(other)
-        if context.inverse_match:
-            passed = not passed
+        with self.__set_context(context):
+            passed = self._matches(other)
 
         if not context.nested_call and self.__state.was_already_run:
             warnings.warn(f'Erroneous re-run of {self}. Create a new Matcher instance for each use!')
 
-        self.__state.update(passed, other)
+        reported_passed = passed if not context.mismatch_expected else not passed
+        self.__state.update(reported_passed, other)
 
         return passed
 
     @final
     def __eq__(self, other: MatchedType) -> bool:
-        return self.matches(other, _MatcherContext(inverse_match=False, nested_call=False))
+        return self.matches(other, _MatcherContext(mismatch_expected=False, nested_call=False))
 
     @final
     def __ne__(self, other: MatchedType) -> bool:
-        return self.matches(other, _MatcherContext(inverse_match=True, nested_call=False))
+        return not self.matches(other, _MatcherContext(mismatch_expected=True, nested_call=False))
 
     @final
     def __str__(self) -> str:
@@ -148,3 +151,10 @@ class Matcher(ABC):
         failed_value = sequence_or_its_only_member(self.__state.failed_values)
         status_str = f'[FAILED for {failed_value!r}]' if self.__state.status == _MatcherStatus.FAILED else ''
         return f'{self.__class__.__name__}({self._description()}){status_str}'
+
+    @final
+    @contextmanager
+    def __set_context(self, context: _MatcherContext) -> Iterator[None]:
+        self.__context = context
+        yield
+        self.__context = None
