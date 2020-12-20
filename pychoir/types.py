@@ -25,9 +25,10 @@ class ConvertsTo(Matcher):
 
     def _matches(self, other: Any) -> bool:
         try:
-            return isinstance(self.type(other), self.type)
+            converted = self.type(other)
         except:  # noqa: E722
             return False
+        return isinstance(converted, self.type)
 
     def _description(self) -> str:
         return self.type.__name__

@@ -19,3 +19,6 @@ def test_converts_to():
     assert '1' == ConvertsTo(Decimal)
     assert 'asd' != ConvertsTo(int)
     assert [] != ConvertsTo(Decimal)
+
+    assert str(ConvertsTo(int)) == 'ConvertsTo(int)'
+    assert str(ConvertsTo(Decimal)) == 'ConvertsTo(Decimal)'
