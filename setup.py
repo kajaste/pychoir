@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pychoir",
-    version="0.0.4",
+    version="0.0.5",
     author="Antti Kajander",
     author_email="antti.kajander@gmail.com",
-    description="Matcher templates for humans",
+    description="Test Matchers for humans",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/kajaste/pychoir",
