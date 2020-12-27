@@ -35,7 +35,7 @@ from .existential import (  # noqa: F401
     OneOf,
     Optionally,
 )
-from .integration import M, Matches  # noqa: F401
+from .integration import M, MatcherLike, Matches  # noqa: F401
 from .logical import AllOf, And, AnyOf, IsNoneOf, Not, Or, ResultsTrueFor  # noqa: F401
 from .strings import EndsWith, StartsWith  # noqa: F401
 from .types import IsInstance, OfType  # noqa: F401

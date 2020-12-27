@@ -54,6 +54,9 @@ Integration
 -----------
 .. autoclass:: Matches
 .. autoclass:: M
+.. autoclass:: MatcherLike
+   :members:
+   :undoc-members:
 
 Logical
 -------
