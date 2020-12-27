@@ -71,6 +71,7 @@ Logical
 Strings
 -------
 .. autoclass:: EndsWith
+.. autoclass:: MatchesRegex
 .. autoclass:: StartsWith
 
 Types

@@ -1,7 +1,6 @@
 import re
 
-from pychoir import EndsWith, StartsWith
-from pychoir.strings import MatchesRegex
+from pychoir import EndsWith, MatchesRegex, StartsWith
 
 
 def test_startswith():
