@@ -13,6 +13,9 @@ if sys.version_info >= (3, 8):
     from typing import Protocol
 
     class Matchable(Protocol):
+        """Type for a value that can be matched against using the :code:`==` operator (has the :code:`__eq__()` method).
+        In the pychoir API, you can typically pass `Matcher` s and/or normal values where `Matchable` s are expected.
+        """
         def __eq__(self, other: MatchedType) -> bool:
             ...  # pragma: no cover
 else:
@@ -84,13 +87,14 @@ class _MatcherContext:
 
 
 class Matcher(ABC):
+    """The baseclass for all Matchers."""
     def __init__(self) -> None:
         super().__init__()
         self.__state = _MatcherState()
         self.__context: Optional[_MatcherContext] = None
 
-    def as_(self, _: Type[T]) -> T:
-        """To make matchers pass type checking"""
+    def as_(self, type_: Type[T]) -> T:
+        """To make matchers pass type checking."""
         return self  # type: ignore
 
     @final
@@ -100,7 +104,14 @@ class Matcher(ABC):
         other: MatchedType,
         expect_mismatch: bool = False
     ) -> bool:
-        """For calling Matchers from inside Matchers"""
+        """For evaluating Matchables (or calling Matchers) from inside a Matcher.
+
+        Takes care of passing all necessary context and updating state when matching.
+
+        :param matcher: The value or Matcher to compare against.
+        :param other: The value being compared.
+        :param expect_mismatch: Set to True when expecting a mismatch (for example in :class:`Not`).
+        """
         if self.__context is not None and self.__context.mismatch_expected:
             expect_mismatch = not expect_mismatch
 
@@ -111,10 +122,22 @@ class Matcher(ABC):
 
     @abstractmethod
     def _matches(self, other: MatchedType) -> bool:
+        """Returns True when Matcher matches, False otherwise.
+
+        :param other: The value being compared.
+
+        **To be implemented by all Matchers.**
+        """
         ...  # pragma: no cover
 
     @abstractmethod
     def _description(self) -> str:
+        """Returns a textual representation of the Matcher's parameters.
+
+        For example in :code:`"EqualTo('foo')"` the :code:`'foo'` is returned by :code:`_description()`.
+
+        **To be implemented by all Matchers.**
+        """
         ...  # pragma: no cover
 
     @final

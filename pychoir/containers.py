@@ -14,7 +14,7 @@ else:
 
 
 class HasLength(Matcher):
-    """A Matcher checking that the len() of the compared value matches the passed Matchable.
+    """A Matcher checking that the `len()` of the compared value matches the passed Matchable.
 
     :param matcher: The value or Matcher to compare against.
 
