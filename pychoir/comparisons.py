@@ -64,7 +64,7 @@ class GreaterThan(Matcher):
       >>> from pychoir import GreaterThan
       >>> [2] == [GreaterThan(2)]
       False
-      >>> 3 == GreaterThan(2)
+      >>> [3] == [GreaterThan(2)]
       True
     """
     def __init__(self, threshold: Any):
