@@ -4,6 +4,17 @@ from pychoir.core import Matcher
 
 
 class IsInstance(Matcher):
+    """A Matcher checking that the compared object's type matches the passed one.
+
+    :param type_: The expected type of compared values.
+
+    Usage:
+      >>> from pychoir import IsInstance
+      >>> 5 == IsInstance(int)
+      True
+      >>> 'foobar' == IsInstance(int)
+      False
+    """
     def __init__(self, type_: Type[Any]):
         super().__init__()
         self.type = type_
@@ -19,6 +30,17 @@ OfType = IsInstance
 
 
 class ConvertsTo(Matcher):
+    """A Matcher checking that the compared value can be converted into the passed type.
+
+    :param type_: The type to which conversion shall be attempted.
+
+    Usage:
+      >>> from pychoir import ConvertsTo
+      >>> '5' == ConvertsTo(int)
+      True
+      >>> '5.2' == ConvertsTo(int)
+      False
+    """
     def __init__(self, type_: Type[Any]):
         super().__init__()
         self.type = type_

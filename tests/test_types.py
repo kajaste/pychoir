@@ -1,7 +1,6 @@
 from decimal import Decimal
 
-from pychoir import IsInstance, OfType
-from pychoir.types import ConvertsTo
+from pychoir import ConvertsTo, IsInstance, OfType
 
 
 def test_is_instance():

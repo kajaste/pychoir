@@ -163,7 +163,7 @@ class DictContainsAllOf(Matcher):
     :param value: The Mapping to find in the Mapping compared against.
 
     Usage:
-      >>> from pychoir import DictContainsAllOf
+      >>> from pychoir import DictContainsAllOf, NotPresent
       >>> {'a': 1, 'b': 2, 'd': 3} == DictContainsAllOf({'a': 1, 'c': NotPresent})
       True
       >>> {'a': 1, 'c': 2, 'd': 3} == DictContainsAllOf({'a': 1, 'c': NotPresent})
@@ -185,7 +185,11 @@ class DictContainsAllOf(Matcher):
 
 
 class _NotPresent:
-    pass
+    def __str__(self) -> str:
+        return 'NotPresent'
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
 NotPresent = _NotPresent()
