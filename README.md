@@ -7,6 +7,10 @@ Super duper low cognitive overhead matching for Python developers reading or wri
 
 PyChoir has mostly been developed for use with `pytest`, but nothing prevents from using it in any other test framework (like vanilla `unittest`) or even outside of testing, if you feel like it.
 
+## Installation
+* With pip: `pip install pychoir`
+* With pipenv: `pipenv install --dev pychoir`
+
 ## Why?
 
 You have probably written quite a few tests where you assert something like
