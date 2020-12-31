@@ -1,15 +1,19 @@
-# PyChoir - Python Test Matchers for humans
+# `pychoir` - Python Test Matchers for humans
 [![PyPI version](https://badge.fury.io/py/pychoir.svg)](https://badge.fury.io/py/pychoir)
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pychoir.svg)](https://pypi.python.org/pypi/pychoir/)
 [![GitHub Actions (Tests)](https://github.com/Kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
+[![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=latest)](https://pychoir.readthedocs.io/en/latest/?badge=latest)
 
 Super duper low cognitive overhead matching for Python developers reading or writing tests. Implemented in pure Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8 and 3.9. PyPy (3.6, 3.7) works fine too.
 
-PyChoir has mostly been developed for use with `pytest`, but nothing prevents from using it in any other test framework (like vanilla `unittest`) or even outside of testing, if you feel like it.
+`pychoir` has mostly been developed for use with `pytest`, but nothing prevents from using it in any other test framework (like vanilla `unittest`) or even outside of testing, if you feel like it.
 
 ## Installation
 * With pip: `pip install pychoir`
 * With pipenv: `pipenv install --dev pychoir`
+
+## Documentation
+Check out the API Reference on readthedocs for detailed info on all the available Matchers [https://pychoir.readthedocs.io/en/latest/api.html](https://pychoir.readthedocs.io/en/latest/api.html)
 
 ## Why?
 
@@ -39,7 +43,7 @@ assert result == {'some_fields': 'some values'}
 
 but this is not very convenient for anyone in the long run.
 
-This is where PyChoir comes in with matchers:
+This is where `pychoir` comes in with matchers:
 
 ```python
 from pychoir import LessThan, All, HasLength, IsNoneOr, And, IsInstance
@@ -51,13 +55,17 @@ assert thing_under_test() == {
 }
 ```
 
-You can place a matcher almost anywhere where a value can be. **PyChoir matchers work well inside lists, tuples, dicts, dataclasses.** You can also place normal values inside matchers. A core principle is that PyChoir Matchers are composable and can be used freely in various combinations. For example `[Or(LessThan(3), 5)]` is "equal to" a list with one item, holding a value equal to 5 or any value less than 3.
+You can also check many things about the same value: for example `And(IsInstance(int), 5)` will make sure that the value is not only equal to 5, but is also an `int` (goodbye to accidental `5.0`).
+
+You can place a matcher almost anywhere where a value can be. **`pychoir` matchers work well inside lists, tuples, dicts, dataclasses, ...** You can also place normal values inside matchers and they will match as with traditional `==` or `!=`.
+
+A core principle is that `pychoir` Matchers are composable and can be used freely in various combinations. For example `[Or(LessThan(3), 5)]` is "equal to" a list with one item, holding a value equal to 5 or any value less than 3.
 
 ## Can I write custom Matchers of my own
 
-Yes, you can! PyChoir Matcher baseclass has been designed to be usable by code outside of the library. It also takes care of most of the generic plumbing, so your custom matcher typically needs very little code.
+Yes, you can! `pychoir` Matcher baseclass has been designed to be usable by code outside of the library. It also takes care of most of the generic plumbing, so your custom matcher typically needs very little code.
 
-Here is the implementation of IsInstance as an example:
+Here is the implementation of `IsInstance` as an example:
 
 ```python
 from typing import Any, Type
@@ -76,7 +84,7 @@ class IsInstance(Matcher):
 
 ```
 
-All you need to take care of is defining the parameters, the match itself, and a description of the parameters.
+All you need to take care of is defining the parameters (if any) in `__init__()`, the match itself in `_matches()`, and a description of the parameters in `_description()`.
 
 Here is an even simpler Anything matcher that does not take parameters and matches literally anything:
 
@@ -92,11 +100,17 @@ class Anything(Matcher):
         return ''
 ```
 
+If your custom matcher is generic enough to be useful for everyone, please contribute (fork and make a pull request for now) and have it included in `pychoir`!
+
 ## Why not \<X\>?
 
 ### Hamcrest
 
-Nothing wrong with hamcrest as such, but PyChoir aims to be better integrated with natural Python syntax. You can use hamcrest matchers through PyChoir if you like, wrapping them in the `Matches(my_hamcrest_matcher)` matcher.
+Nothing wrong with hamcrest as such, but `pychoir` aims to be better integrated with natural Python syntax. You can use hamcrest matchers through `pychoir` if you like, wrapping them in the `Matches(my_hamcrest_matcher)` matcher.
+
+### assertpy
+
+What a nice fluent API for matching, allowing matching multiple things at once. However, you can only match one value at a time. With `pychoir` you'll be matching the whole result at once, be it a single value, list, tuple, dict, dataclass, you name it.
 
 ### ???
 
@@ -105,11 +119,11 @@ I'd be happy to hear from you about other similar libraries.
 
 ## What is it based on?
 
-Python has a rather peculiar way of handling equivalence, which allows customizing it in wild and imaginative ways. This is a very powerful feature, which one should usually avoid overusing. PyChoir is built around the idea of using this power to build a lean and mean matcher implementation that looks like a custom DSL but is actually completely standard Python 3.
+Python has a rather peculiar way of handling equivalence, which allows customizing it in wild and imaginative ways. This is a very powerful feature, which one should usually avoid overusing. `pychoir` is built around the idea of using this power to build a lean and mean matcher implementation that looks like a custom DSL but is actually completely standard Python 3.
 
 ## What is the project status?
 
-This is only the very start. PyChoir is, however, already useful in many use cases and more features are coming. Next improvements are most likely going to be related to documentation.
+Today, after about a month and a thousand downloads since the first release, `pychoir` has quite a nice range of Matchers built-in as well as basic API Reference documenting them. New ideas are still plenty and more can be discussed in [Discussions](https://github.com/kajaste/pychoir/discussions). Documentation will receive updates as well. Most remarkably fancy examples are missing. Making `pychoir` easier to contribute to is also on the list.
 
 ## Where does the name come from?
 
