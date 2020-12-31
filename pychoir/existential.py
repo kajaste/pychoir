@@ -8,11 +8,11 @@ class Anything(Matcher):
 
     Usage:
       >>> from pychoir import Anything
-      >>> None == Anything
+      >>> None == Anything()
       True
-      >>> {'a': None} == {'a': Anything}
+      >>> {'a': None} == {'a': Anything()}
       True
-      >>> {'b': 1} == {'a': Anything}
+      >>> {'b': 1} == {'a': Anything()}
       False
     """
     def _matches(self, _: Any) -> bool:

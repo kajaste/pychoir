@@ -76,5 +76,6 @@ Strings
 
 Types
 -----
+.. autoclass:: ConvertsTo
 .. autoclass:: IsInstance
 .. autoclass:: OfType
