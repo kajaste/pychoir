@@ -50,7 +50,11 @@ class Or(Matcher):
         self.matchers = matchers
 
     def _matches(self, other: Any) -> bool:
-        return any(self.nested_match(matcher, other) for matcher in self.matchers)
+        passed = any(self.nested_match(matcher, other) for matcher in self.matchers)
+        if passed == self.expected_result:
+            for matcher in self.matchers:
+                self.nested_reset(matcher)
+        return passed
 
     def _description(self) -> str:
         return ', '.join(map(repr, self.matchers))

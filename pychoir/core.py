@@ -51,6 +51,11 @@ class _MatcherState:
         else:
             self.__add_failure(value)
 
+    def reset_failures(self) -> None:
+        if self.__status == _MatcherStatus.FAILED:
+            self.__status = _MatcherStatus.NOT_RUN
+            self.__failed_values = []
+
     @property
     def status(self) -> _MatcherStatus:
         return self.__status
@@ -119,6 +124,29 @@ class Matcher(ABC):
             return matcher.matches(other, _MatcherContext(mismatch_expected=expect_mismatch, nested_call=True))
         else:
             return matcher == other
+
+    @final
+    def nested_reset(
+        self,
+        matcher: Union['Matcher', Matchable],
+    ) -> None:
+        """For resetting failure state of child matchers in case of passing due to other Matchers.
+
+        For example in :class:`Or`, it is enough that one child Matcher passes.
+        The matchers tried up to that point should not report failure.
+        After a match, :class:`Or` should call `self.nested_reset(matcher)` for all its Matchers.
+
+        :param matcher: The value or Matcher to reset (nothing will be done for non-Matchers).
+        """
+        if isinstance(matcher, Matcher):
+            return matcher.__state.reset_failures()
+
+    @final
+    @property
+    def expected_result(self) -> bool:
+        if self.__context is None:
+            raise RuntimeError('expected_result is only available while in match context')
+        return not self.__context.mismatch_expected
 
     @abstractmethod
     def _matches(self, other: MatchedType) -> bool:

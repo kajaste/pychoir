@@ -65,7 +65,7 @@ def test_not_or():
         with patch('warnings.warn'):  # Suppress warnings from using the same matcher many times
             for i in (1, 2, 3):
                 assert i != not_or_123
-        assert str(not_or_123) == 'Not(Or(EqualTo(1)[FAILED for (2, 3)], 2, 3))'
+        assert str(not_or_123) == 'Not(Or(EqualTo(1), 2, 3))'
 
     with make_not_or_123() as not_or_123:
         with patch('warnings.warn'):  # Suppress warnings from using the same matcher many times
