@@ -19,7 +19,7 @@ def test_endswith():
 
 def test_matches_regex():
     assert 'foobar' == MatchesRegex(r'^foo')
-    assert 'foobar' == MatchesRegex(re.compile(r'^foo.ar$', flags=re.VERBOSE))
+    assert 'foobar' == MatchesRegex(re.compile(r'bar$', flags=re.VERBOSE))
     assert 'bafoo' != MatchesRegex(r'^foo')
 
     assert str(MatchesRegex(re.compile(r'^foo', re.VERBOSE))) == "MatchesRegex(re.compile('^foo', re.VERBOSE))"

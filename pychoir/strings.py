@@ -76,7 +76,7 @@ class MatchesRegex(Matcher):
         self.regex = regex
 
     def _matches(self, other: str) -> bool:
-        return re.match(self.regex, other) is not None
+        return re.search(self.regex, other) is not None
 
     def _description(self) -> str:
         return repr(self.regex)
