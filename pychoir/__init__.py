@@ -19,12 +19,15 @@ from .containers import (  # noqa: F401
     ContainsAnyOf,
     ContainsNoneOf,
     DictContainsAllOf,
+    First,
     HasLength,
     InAnyOrder,
     IsEmpty,
     IsNotPresentOr,
+    Last,
     Len,
     NotPresent,
+    Slice,
 )
 from .core import Matchable, Matcher, that  # noqa: F401
 from .existential import (  # noqa: F401

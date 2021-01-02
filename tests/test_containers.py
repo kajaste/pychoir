@@ -1,5 +1,7 @@
 from typing import Any, Dict
 
+import pytest
+
 from pychoir import (
     LTE,
     All,
@@ -9,15 +11,20 @@ from pychoir import (
     ContainsAnyOf,
     ContainsNoneOf,
     DictContainsAllOf,
+    EqualTo,
+    First,
     GreaterThan,
     HasLength,
     InAnyOrder,
     IsEmpty,
     IsInstance,
     IsNotPresentOr,
+    Last,
     Len,
+    LessThan,
     Matcher,
     NotPresent,
+    Slice,
 )
 
 
@@ -114,3 +121,65 @@ def test_is_not_present_or():
     assert {'b': 1} != matcher()
 
     assert str(matcher()) == "DictContainsAllOf({'a': IsNotPresentOr(1), 'b': 2})"
+
+
+def test_first():
+    assert 'abcdef' == First(3)('abc')
+    assert [1, 2, 3, 'a', 'b', 'c'] == First(3)(All(IsInstance(int)))
+    assert [1, 2, 3, 'a', 'b', 'c'] != First(4)(All(IsInstance(int)))
+    assert [1, 2, 3] == First(3)(IsInstance(list))
+
+    with pytest.raises(RuntimeError) as rte_info:
+        assert [1, 2, 3] == First(2)
+    assert (str(rte_info.value).split('\n')[0]
+            == "Cannot use First without specifying a Matcher. Try First(2)(In('abc'))")
+
+    with pytest.raises(RuntimeError) as rte_info:
+        assert [1, 2, 3] == First(2)([0, 1])([2])  # type: ignore
+    assert str(rte_info.value).split('\n')[0] == "First already has a Matcher added"
+
+    with pytest.raises(AssertionError) as exc_info:
+        assert [1, 2, 3] == First(2)([0, 1])
+    assert str(exc_info.value).split('\n')[0] == 'assert [1, 2, 3] == First(2)([0, 1])[FAILED for [1, 2, 3]]'
+
+
+def test_last():
+    assert 'abcdef' == Last(3)('def')
+    assert [1, 2, 3, 'a', 'b', 'c'] == Last(3)(All(IsInstance(str)))
+    assert [1, 2, 3, 'a', 'b', 'c'] != Last(4)(All(IsInstance(str)))
+    assert [1, 2, 3] == Last(3)(IsInstance(list))
+
+    with pytest.raises(RuntimeError) as rte_info:
+        assert [1, 2, 3] == Last(2)
+    assert (str(rte_info.value).split('\n')[0]
+            == "Cannot use Last without specifying a Matcher. Try Last(2)(In('abc'))")
+
+    with pytest.raises(RuntimeError) as rte_info:
+        assert [1, 2, 3] == Last(2)([0, 1])([2])  # type: ignore
+    assert str(rte_info.value).split('\n')[0] == "Last already has a Matcher added"
+
+    with pytest.raises(AssertionError) as exc_info:
+        assert [1, 2, 3] == Last(2)([1, 2])
+    assert str(exc_info.value).split('\n')[0] == 'assert [1, 2, 3] == Last(2)([1, 2])[FAILED for [1, 2, 3]]'
+
+
+def test_slice():
+    assert 'abcdef' == Slice[3:](EqualTo('def'))
+    assert 'abcdef' == Slice[:3](All(LessThan('d')))
+    assert [1, 2, 3] == Slice[1](EqualTo(2))
+
+    with pytest.raises(RuntimeError) as rte_info:
+        assert [1, 2, 3] == Slice[2]
+    assert (str(rte_info.value).split('\n')[0]
+            == "Cannot use Slice without specifying a Matcher. Try Slice[2](In('abc'))")
+
+    with pytest.raises(RuntimeError) as rte_info:
+        assert [1, 2, 3] == Slice[2:3]([0, 1])([2])  # type: ignore
+    assert str(rte_info.value).split('\n')[0] == "Slice already has a Matcher added"
+
+    with pytest.raises(AssertionError) as exc_info:
+        assert [1, 2, 3] == Slice[0](EqualTo(0))
+    assert (
+        str(exc_info.value).split('\n')[0] ==
+        'assert [1, 2, 3] == Slice[0](EqualTo(0)[FAILED for 1])[FAILED for [1, 2, 3]]'
+    )
