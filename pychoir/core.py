@@ -93,8 +93,9 @@ class _MatcherContext:
 
 class Matcher(ABC):
     """The baseclass for all Matchers."""
-    def __init__(self) -> None:
+    def __init__(self, override_name: Optional[str] = None) -> None:
         super().__init__()
+        self.__name = override_name if override_name is not None else self.__class__.__name__
         self.__state = _MatcherState()
         self.__context: Optional[_MatcherContext] = None
 
@@ -201,7 +202,7 @@ class Matcher(ABC):
     def __describe(self) -> str:
         failed_value = sequence_or_its_only_member(self.__state.failed_values)
         status_str = f'[FAILED for {failed_value!r}]' if self.__state.status == _MatcherStatus.FAILED else ''
-        return f'{self.__class__.__name__}({self._description()}){status_str}'
+        return f'{self.__name}({self._description()}){status_str}'
 
     @final
     @contextmanager
@@ -258,3 +259,13 @@ def that(value: MatchedType) -> MatcherWrapper:
       AssertionError
     """
     return MatcherWrapper(value)
+
+
+if sys.version_info >= (3, 8):
+    from typing import Protocol
+
+    class Transformer(Protocol):
+        def __call__(self, matcher: Matchable) -> Matcher:
+            ...
+else:
+    Transformer = object
