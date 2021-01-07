@@ -1,7 +1,8 @@
 # `pychoir` - Python Test Matchers for humans
-[![PyPI version](https://badge.fury.io/py/pychoir.svg)](https://badge.fury.io/py/pychoir)
+[![PyPI version](http://img.shields.io/pypi/v/pychoir)](https://pypi.python.org/pypi/pychoir)
+[![Wheel](https://pypip.in/wheel/PyHamcrest/badge.svg)](https://pypi.python.org/pypi/pychoir)
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pychoir.svg)](https://pypi.python.org/pypi/pychoir/)
-[![GitHub Actions (Tests)](https://github.com/Kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
+[![GitHub Actions (Tests)](https://github.com/kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
 [![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=latest)](https://pychoir.readthedocs.io/en/latest/?badge=latest)
 
 Super duper low cognitive overhead matching for Python developers reading or writing tests. Implemented in pure Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8 and 3.9. PyPy (3.6, 3.7) works fine too.
@@ -104,13 +105,13 @@ If your custom matcher is generic enough to be useful for everyone, please contr
 
 ## Why not \<X\>?
 
-### Hamcrest
+### [PyHamcrest](https://github.com/hamcrest/PyHamcrest)
 
-Nothing wrong with hamcrest as such, but `pychoir` aims to be better integrated with natural Python syntax. You can use hamcrest matchers through `pychoir` if you like, wrapping them in the `Matches(my_hamcrest_matcher)` matcher.
+Nothing wrong with hamcrest as such, but `pychoir` aims to be better integrated with natural Python syntax, meaning for example that you do not need to use a custom assert function. `pychoir` matchers are drop-in replacements for your normal values alone or inside structures, even deeply nested ones. You can use hamcrest matchers through `pychoir` if you like, wrapping them in the `Matches(my_hamcrest_matcher)` matcher, although the idea is that `pychoir` would soon come with an equivalent set of matchers.
 
-### assertpy
+### [assertpy](https://github.com/assertpy/assertpy)
 
-What a nice fluent API for matching, allowing matching multiple things at once. However, you can only match one value at a time. With `pychoir` you'll be matching the whole result at once, be it a single value, list, tuple, dict, dataclass, you name it.
+What a nice fluent API for matching, allowing matching multiple things at once. However, you can only match one value at a time. With `pychoir` you'll be matching the whole result at once, be it a single value, list, tuple, dict, dataclass, you name it. Let's see if `pychoir` gets some of that fluent stuff going forward as well.
 
 ### ???
 
