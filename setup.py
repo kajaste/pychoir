@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pychoir",
-    version="0.0.6",
+    version="0.0.7",
     author="Antti Kajander",
     author_email="antti.kajander@gmail.com",
     description="Test Matchers for humans",
