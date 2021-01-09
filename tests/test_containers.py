@@ -17,6 +17,15 @@ from pychoir import (
     Matcher,
     NotPresent,
 )
+from pychoir.containers import IsEmpty
+
+
+def test_is_empty():
+    assert {'a': []} == {'a': IsEmpty()}
+    assert ['foo', '', 'bar'] == ['foo', IsEmpty(), 'bar']
+    assert not 'foo' == IsEmpty()
+
+    assert str(IsEmpty()) == 'IsEmpty()'
 
 
 def test_has_length():

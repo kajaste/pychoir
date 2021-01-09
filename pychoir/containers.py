@@ -13,6 +13,24 @@ else:
     Lengthy = Any
 
 
+class IsEmpty(Matcher):
+    """A Matcher checking that the `len()` of the compared value is 0.
+
+    Usage:
+      >> from pychoir import All, IsEmpty, Not
+      >> ('', [], {}, set(), tuple()) == All(IsEmpty())
+      True
+      >> {'not': 'empty'} == Not(IsEmpty())
+      True
+    """
+
+    def _matches(self, other: Lengthy) -> bool:
+        return len(other) == 0
+
+    def _description(self) -> str:
+        return ''
+
+
 class HasLength(Matcher):
     """A Matcher checking that the `len()` of the compared value matches the passed Matchable.
 
