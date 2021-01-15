@@ -11,13 +11,13 @@ from pychoir import (
     DictContainsAllOf,
     GreaterThan,
     HasLength,
+    IsEmpty,
     IsInstance,
     IsNotPresentOr,
     Len,
     Matcher,
     NotPresent,
 )
-from pychoir.containers import IsEmpty
 
 
 def test_is_empty():

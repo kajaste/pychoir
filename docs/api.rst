@@ -27,6 +27,7 @@ Containers
 .. autoclass:: ContainsNoneOf
 .. autoclass:: DictContainsAllOf
 .. autoclass:: HasLength
+.. autoclass:: IsEmpty
 .. autoclass:: IsNotPresentOr
 .. autoclass:: Len
 .. autoattribute:: containers.NotPresent
