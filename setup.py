@@ -1,11 +1,13 @@
 import setuptools
 
+from pychoir.__version__ import version
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="pychoir",
-    version="0.0.7",
+    version=version,
     author="Antti Kajander",
     author_email="antti.kajander@gmail.com",
     description="Test Matchers for humans",
