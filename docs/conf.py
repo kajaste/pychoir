@@ -16,6 +16,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 
+from pychoir.__version__ import version
 import pychoir
 
 # -- Project information -----------------------------------------------------
@@ -25,7 +26,7 @@ copyright = '2020, Antti Kajander'
 author = 'Antti Kajander'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.0.7'
+release = f'v{version}'
 
 
 # -- General configuration ---------------------------------------------------
