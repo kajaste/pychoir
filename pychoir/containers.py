@@ -17,10 +17,10 @@ class IsEmpty(Matcher):
     """A Matcher checking that the `len()` of the compared value is 0.
 
     Usage:
-      >> from pychoir import All, IsEmpty, Not
-      >> ('', [], {}, set(), tuple()) == All(IsEmpty())
+      >>> from pychoir import All, IsEmpty, Not
+      >>> ('', [], {}, set(), tuple()) == All(IsEmpty())
       True
-      >> {'not': 'empty'} == Not(IsEmpty())
+      >>> {'not': 'empty'} == Not(IsEmpty())
       True
     """
 
