@@ -11,6 +11,7 @@ from pychoir import (
     DictContainsAllOf,
     GreaterThan,
     HasLength,
+    InAnyOrder,
     IsEmpty,
     IsInstance,
     IsNotPresentOr,
@@ -87,6 +88,16 @@ def test_dict_contains_all_of():
 
     assert (str(DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4}))
             == "DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4})")
+
+
+def test_in_any_order():
+    assert [1, 2, 3] == InAnyOrder([3, 2, 1])
+    assert [1, 2, 3] != InAnyOrder([3, 2])
+    assert [1, 2, 3] != InAnyOrder([3, 2, 1, 0])
+    assert [1, 2, 2] == InAnyOrder([2, 1, 2])
+    assert [1, 2, 2] != InAnyOrder([1, 1, 2])
+
+    assert str(InAnyOrder([1, 2, 3])) == 'InAnyOrder([1, 2, 3])'
 
 
 def test_is_not_present_or():

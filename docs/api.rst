@@ -27,6 +27,7 @@ Containers
 .. autoclass:: ContainsNoneOf
 .. autoclass:: DictContainsAllOf
 .. autoclass:: HasLength
+.. autoclass:: InAnyOrder
 .. autoclass:: IsEmpty
 .. autoclass:: IsNotPresentOr
 .. autoclass:: Len
