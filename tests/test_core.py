@@ -4,7 +4,16 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from pychoir import Anything, IsInstance, IsTruthy, Matchable, Matcher
+from pychoir import (
+    And,
+    Anything,
+    GreaterThan,
+    InAnyOrder,
+    IsInstance,
+    IsTruthy,
+    Matchable,
+    Matcher,
+)
 
 
 def test_matchable():
@@ -93,6 +102,29 @@ class TestMatcher:
         warn_mock.assert_not_called()
         assert Anything().nested_match(instance, 2)
         warn_mock.assert_not_called()
+
+
+def test_matcher_in_mock_call_params():
+    m = MagicMock()
+
+    m(5)
+    m.assert_called_once_with(Anything())
+    m.assert_called_once_with(And(IsInstance(int), GreaterThan(3)))
+
+    with pytest.raises(AssertionError) as exc_info:
+        m.assert_called_once_with(GreaterThan(5))
+    if sys.version_info >= (3, 8):
+        assert (str(exc_info.value)
+                == "expected call not found.\n"
+                   "Expected: mock(GreaterThan(5)[FAILED for 5])\n"
+                   "Actual: mock(5)")
+    else:
+        assert (str(exc_info.value)
+                == "Expected call: mock(GreaterThan(5)[FAILED for 5])\n"
+                   "Actual call: mock(5)")
+
+    m.do_stuff_to([{'a': 1}, {'a': 2}])
+    m.do_stuff_to.assert_called_once_with(InAnyOrder([{'a': 2}, {'a': 1}]))
 
 
 if sys.version_info >= (3, 7):
