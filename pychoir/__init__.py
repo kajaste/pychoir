@@ -20,6 +20,7 @@ from .containers import (  # noqa: F401
     ContainsNoneOf,
     DictContainsAllOf,
     HasLength,
+    InAnyOrder,
     IsEmpty,
     IsNotPresentOr,
     Len,

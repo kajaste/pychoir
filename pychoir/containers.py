@@ -1,5 +1,5 @@
 import sys
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, Sequence
 
 from pychoir.core import Matchable, Matcher
 
@@ -200,6 +200,37 @@ class DictContainsAllOf(Matcher):
 
     def _description(self) -> str:
         return repr(self.expected)
+
+
+class InAnyOrder(Matcher):
+    """A Matcher checking that a Sequence contains *exactly* the passed items, in any order.
+
+    :param value: A Sequence containing the expected items, in any order.
+
+    Usage:
+      >>> from pychoir import InAnyOrder
+      >>> [1, 2, 3, 3] == InAnyOrder([3, 2, 3, 1])
+      True
+      >>> [1, 2] == InAnyOrder([3, 2, 1])
+      False
+      >>> [{'a': 1}, {'b': 2}] == InAnyOrder([{'b': 2}, {'a': 1}])
+      True
+    """
+    def __init__(self, values: Sequence[Any]):
+        super().__init__()
+        self.expected_values = values
+
+    def _matches(self, other: Iterable[Any]) -> bool:
+        values_left = [value for value in self.expected_values]
+        for value in other:
+            try:
+                values_left.remove(value)
+            except ValueError:
+                return False
+        return not values_left
+
+    def _description(self) -> str:
+        return repr(self.expected_values)
 
 
 class _NotPresent:
