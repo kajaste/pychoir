@@ -42,7 +42,7 @@ assert (
 assert result == {'some_fields': 'some values'}
 ```
 
-but this is not very convenient for anyone in the long run.
+...but this is not very convenient for anyone in the long run.
 
 This is where `pychoir` comes in with matchers:
 
@@ -58,13 +58,13 @@ assert thing_under_test() == {
 
 You can also check many things about the same value: for example `And(IsInstance(int), 5)` will make sure that the value is not only equal to 5, but is also an `int` (goodbye to accidental `5.0`).
 
-You can place a matcher almost anywhere where a value can be. **`pychoir` matchers work well inside lists, tuples, dicts, dataclasses, ...** You can also place normal values inside matchers and they will match as with traditional `==` or `!=`.
+You can place a matcher almost anywhere where a value can be. **`pychoir` matchers work well inside lists, tuples, dicts, dataclasses, ...** You can also place normal values inside matchers, and they will match as with traditional `==` or `!=`.
 
 A core principle is that `pychoir` Matchers are composable and can be used freely in various combinations. For example `[Or(LessThan(3), 5)]` is "equal to" a list with one item, holding a value equal to 5 or any value less than 3.
 
 ## Can I write custom Matchers of my own
 
-Yes, you can! `pychoir` Matcher baseclass has been designed to be usable by code outside of the library. It also takes care of most of the generic plumbing, so your custom matcher typically needs very little code.
+Yes, you can! `pychoir` Matcher baseclass has been designed to be usable by code outside the library. It also takes care of most of the generic plumbing, so your custom matcher typically needs very little code.
 
 Here is the implementation of `IsInstance` as an example:
 
