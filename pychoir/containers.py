@@ -205,7 +205,7 @@ class DictContainsAllOf(Matcher):
 class InAnyOrder(Matcher):
     """A Matcher checking that a Sequence contains *exactly* the passed items, in any order.
 
-    :param value: A Sequence containing the expected items, in any order.
+    :param values: A Sequence containing the expected items, in any order.
 
     Usage:
       >>> from pychoir import InAnyOrder

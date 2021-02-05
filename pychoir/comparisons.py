@@ -58,7 +58,7 @@ NE = NotEqualTo
 class GreaterThan(Matcher):
     """A Matcher checking that compared value is greater than the given value.
 
-    :param value: The value to compare against.
+    :param threshold: The value to compare against.
 
     Usage:
       >>> from pychoir import GreaterThan
@@ -84,7 +84,7 @@ GT = GreaterThan
 class GreaterThanOrEqualTo(Matcher):
     """A Matcher checking that compared value is greater than or equal to the given value.
 
-    :param value: The value to compare against.
+    :param threshold: The value to compare against.
 
     Usage:
       >>> from pychoir import GreaterThanOrEqualTo
@@ -110,7 +110,7 @@ GTE = GreaterThanOrEqualTo
 class LessThan(Matcher):
     """A Matcher checking that compared value is less than the given value.
 
-    :param value: The value to compare against.
+    :param threshold: The value to compare against.
 
     Usage:
       >>> from pychoir import LessThan
@@ -136,7 +136,7 @@ LT = LessThan
 class LessThanOrEqualTo(Matcher):
     """A Matcher checking that compared value is less than or equal to the given value.
 
-    :param value: The value to compare against.
+    :param threshold: The value to compare against.
 
     Usage:
       >>> from pychoir import LessThanOrEqualTo
