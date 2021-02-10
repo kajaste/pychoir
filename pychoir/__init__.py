@@ -26,7 +26,7 @@ from .containers import (  # noqa: F401
     Len,
     NotPresent,
 )
-from .core import Matchable, Matcher  # noqa: F401
+from .core import Matchable, Matcher, that  # noqa: F401
 from .existential import (  # noqa: F401
     Anything,
     In,

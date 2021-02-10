@@ -7,12 +7,14 @@ import pytest
 from pychoir import (
     And,
     Anything,
+    EqualTo,
     GreaterThan,
     InAnyOrder,
     IsInstance,
     IsTruthy,
     Matchable,
     Matcher,
+    that,
 )
 
 
@@ -125,6 +127,14 @@ def test_matcher_in_mock_call_params():
 
     m.do_stuff_to([{'a': 1}, {'a': 2}])
     m.do_stuff_to.assert_called_once_with(InAnyOrder([{'a': 2}, {'a': 1}]))
+
+
+def test_assert_that_matches():
+    assert that(5).matches(And(EqualTo(5), IsInstance(int)))
+
+    with pytest.raises(AssertionError) as exc_info:
+        assert that(5).matches(EqualTo(4))
+    assert str(exc_info.value).split('\n')[0] == 'assert that(5).matches(EqualTo(4)[FAILED for 5])'
 
 
 if sys.version_info >= (3, 7):
