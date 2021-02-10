@@ -209,3 +209,37 @@ class Matcher(ABC):
         self.__context = context
         yield
         self.__context = None
+
+
+class MatchWrapper:
+    def __init__(self, value: MatchedType, matchers: Tuple[Matcher, ...], did_match: bool):
+        self.value = value
+        self.matchers = matchers
+        self.did_match = did_match
+
+    def __bool__(self) -> bool:
+        return self.did_match
+
+    def __str__(self) -> str:
+        return f'that({self.value!r}).matches({", ".join(map(repr, self.matchers))})'
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
+class MatcherWrapper:
+    def __init__(self, value: MatchedType):
+        self.value = value
+
+    def matches(self, *matchers: Matcher) -> MatchWrapper:
+        context = _MatcherContext(mismatch_expected=False, nested_call=False)
+        did_match = True
+        for matcher in matchers:
+            if not matcher.matches(self.value, context):
+                did_match = False
+                break
+        return MatchWrapper(self.value, matchers, did_match)
+
+
+def that(value: MatchedType) -> MatcherWrapper:
+    return MatcherWrapper(value)
