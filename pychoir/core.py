@@ -233,11 +233,7 @@ class MatcherWrapper:
 
     def matches(self, *matchers: Matcher) -> MatchWrapper:
         context = _MatcherContext(mismatch_expected=False, nested_call=False)
-        did_match = True
-        for matcher in matchers:
-            if not matcher.matches(self.value, context):
-                did_match = False
-                break
+        did_match = all(matcher.matches(self.value, context) for matcher in matchers)
         return MatchWrapper(self.value, matchers, did_match)
 
 
