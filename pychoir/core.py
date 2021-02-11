@@ -212,16 +212,16 @@ class Matcher(ABC):
 
 
 class MatchWrapper:
-    def __init__(self, value: MatchedType, matchers: Tuple[Matcher, ...], did_match: bool):
+    def __init__(self, value: MatchedType, matcher: Matcher, did_match: bool):
         self.value = value
-        self.matchers = matchers
+        self.matcher = matcher
         self.did_match = did_match
 
     def __bool__(self) -> bool:
         return self.did_match
 
     def __str__(self) -> str:
-        return f'that({self.value!r}).matches({", ".join(map(repr, self.matchers))})'
+        return f'that({self.value!r}).matches({self.matcher})'
 
     def __repr__(self) -> str:
         return str(self)
@@ -231,10 +231,10 @@ class MatcherWrapper:
     def __init__(self, value: MatchedType):
         self.value = value
 
-    def matches(self, *matchers: Matcher) -> MatchWrapper:
+    def matches(self, matcher: Matcher) -> MatchWrapper:
         context = _MatcherContext(mismatch_expected=False, nested_call=False)
-        did_match = all(matcher.matches(self.value, context) for matcher in matchers)
-        return MatchWrapper(self.value, matchers, did_match)
+        did_match = matcher.matches(self.value, context)
+        return MatchWrapper(self.value, matcher, did_match)
 
 
 def that(value: MatchedType) -> MatcherWrapper:
