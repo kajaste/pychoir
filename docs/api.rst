@@ -40,6 +40,9 @@ Core
 .. autoclass:: Matcher
    :members:
    :private-members:
+.. autofunction:: that
+.. autoclass:: pychoir.core.MatcherWrapper
+   :members:
 
 Existential
 -----------
