@@ -232,10 +232,29 @@ class MatcherWrapper:
         self.value = value
 
     def matches(self, matcher: Matcher) -> MatchWrapper:
+        """
+        :param matcher: The Matcher to compare `that(value)` with
+        :return: a truthy value in case `that(value)` passes the given `matcher`
+        """
         context = _MatcherContext(mismatch_expected=False, nested_call=False)
         did_match = matcher.matches(self.value, context)
         return MatchWrapper(self.value, matcher, did_match)
 
 
 def that(value: MatchedType) -> MatcherWrapper:
+    """
+    A helper for syntactically sugar coating matches instead of using `==`.
+
+    :param value: The value to pass into the Matcher in `MatcherWrapper.matches()`
+    :return: A :class:`MatcherWrapper`
+
+    Usage:
+      >>> from pychoir import that, GreaterThan
+      >>> assert that(3).matches(GreaterThan(2))
+      ...
+      >>> assert that(1).matches(GreaterThan(2))
+      Traceback (most recent call last):
+      ...
+      AssertionError
+    """
     return MatcherWrapper(value)
