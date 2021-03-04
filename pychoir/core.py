@@ -261,11 +261,7 @@ def that(value: MatchedType) -> MatcherWrapper:
     return MatcherWrapper(value)
 
 
-if sys.version_info >= (3, 8):
-    from typing import Protocol
-
-    class Transformer(Protocol):
-        def __call__(self, matcher: Matchable) -> Matcher:
-            ...
-else:
-    Transformer = object
+class Transformer(ABC):
+    @abstractmethod
+    def __call__(self, matcher: Matchable) -> Matcher:
+        ...

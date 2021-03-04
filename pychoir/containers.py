@@ -268,7 +268,25 @@ class IsNotPresentOr(Matcher):
         return repr(self.matcher)
 
 
-class First(Matcher, Transformer):
+class _First(Matcher):
+    def __init__(self, how_many: int, matcher: Matchable):
+        super().__init__(override_name='First')
+        self.how_many = how_many
+        self.matcher = matcher
+
+    def _matches(self, other: Sequence[Any]) -> bool:
+        if self.how_many < 2:
+            first = other[0]
+        else:
+            first = other[:self.how_many]
+        return self.nested_match(self.matcher, first)
+
+    def _description(self) -> str:
+        matcher_string = repr(self.matcher)
+        return f'{self.how_many})({matcher_string}'
+
+
+class First(Transformer):
     """A Higher Order Matcher checking that the first `how_many` values match given matchers.
     The matcher is applied to the slice extracted from the passed :class:`Sequence`.
 
@@ -278,35 +296,40 @@ class First(Matcher, Transformer):
       >>> from pychoir import First, All, GreaterThan
       >>> (1, 2, 3) == First(2)((1, 2))
       True
-      >>> (1, 2, 3) == First(2)(All(GreaterThan(2)))
-      False
+      >>> (1, 2, 3) == First()(1)
+      True
     """
     def __init__(self, how_many: int = 1):
         super().__init__()
         self.how_many = how_many
         self.matcher: Optional[Matchable] = None
 
-    def __call__(self, matcher: Matchable) -> Matcher:
+    def __call__(self, matcher: Matchable) -> _First:
         """
         :param matcher: The :class:`Matcher` to apply on the extracted slice.
         """
-        if self.matcher is not None:
-            raise RuntimeError('First already has a Matcher added')
+        return _First(self.how_many, matcher)
+
+
+class _Last(Matcher):
+    def __init__(self, how_many: int, matcher: Matchable):
+        super().__init__(override_name='Last')
+        self.how_many = how_many
         self.matcher = matcher
-        return self
 
     def _matches(self, other: Sequence[Any]) -> bool:
-        if self.matcher is None:
-            raise RuntimeError(f"Cannot use First without specifying a Matcher. Try First({self.how_many})(In('abc'))")
-        first = other[:self.how_many]
-        return self.nested_match(self.matcher, first)
+        if self.how_many < 2:
+            last = other[-1]
+        else:
+            last = other[-self.how_many:]
+        return self.nested_match(self.matcher, last)
 
     def _description(self) -> str:
-        matcher_string = repr(self.matcher) if self.matcher is not None else '!NO MATCHERS!'
+        matcher_string = repr(self.matcher)
         return f'{self.how_many})({matcher_string}'
 
 
-class Last(Matcher, Transformer):
+class Last(Transformer):
     """A Higher Order Matcher checking that the last `how_many` values match given matchers.
     The matcher is applied to the slice extracted from the passed :class:`Sequence`.
 
@@ -316,35 +339,47 @@ class Last(Matcher, Transformer):
       >>> from pychoir import Last, All, LessThan
       >>> (1, 2, 3) == Last(2)((2, 3))
       True
-      >>> (1, 2, 3) == Last(2)(All(LessThan(2)))
-      False
+      >>> (1, 2, 3) == Last()(3)
+      True
     """
     def __init__(self, how_many: int = 1):
-        super().__init__()
         self.how_many = how_many
-        self.matcher: Optional[Matchable] = None
 
-    def __call__(self, matcher: Matchable) -> Matcher:
+    def __call__(self, matcher: Matchable) -> _Last:
         """
         :param matcher: The :class:`Matcher` to apply on the extracted slice.
         """
-        if self.matcher is not None:
-            raise RuntimeError('Last already has a Matcher added')
-        self.matcher = matcher
-        return self
+        return _Last(self.how_many, matcher)
 
-    def _matches(self, other: Sequence[Any]) -> bool:
-        if self.matcher is None:
-            raise RuntimeError(f"Cannot use Last without specifying a Matcher. Try Last({self.how_many})(In('abc'))")
-        last = other[-self.how_many:]
-        return self.nested_match(self.matcher, last)
+
+class _Slice(Matcher):
+    def __init__(self, slice_: Union[int, slice], matcher: Matchable) -> None:
+        super().__init__(override_name=f'Slice[{slice_}]')
+        self.slice = slice_
+        self.matcher = matcher
+
+    def _matches(self, other: Any) -> bool:
+        sliced = other[self.slice]
+        return self.nested_match(self.matcher, sliced)
 
     def _description(self) -> str:
-        matcher_string = repr(self.matcher) if self.matcher is not None else '!NO MATCHERS!'
-        return f'{self.how_many})({matcher_string}'
+        return repr(self.matcher)
 
 
-class _Slice(Matcher, Transformer):
+class _SliceTransformer(Transformer):
+    """Extracts `slice_` from the matched value before checking it with a Matcher.
+    """
+    def __init__(self, slice_: Union[int, slice]) -> None:
+        self.slice: Union[int, slice] = slice_
+
+    def __call__(self, matcher: Matchable) -> _Slice:
+        """
+        :param matcher: The :class:`Matcher` to apply on the extracted slice.
+        """
+        return _Slice(self.slice, matcher)
+
+
+class _SliceFactory:
     """A Higher Order Matcher checking that the sliced values match given matchers.
     The matcher is applied to the slice extracted from the passed :class:`Sequence`.
 
@@ -355,36 +390,11 @@ class _Slice(Matcher, Transformer):
       >>> (1, 2, 3) == Slice[2](And(IsInstance(int), 3))
       True
     """
-    def __init__(self, slice_: Union[int, slice]) -> None:
-        super().__init__(override_name=f'Slice[{slice_}]')
-        self.slice: Union[int, slice] = slice_
-        self.matcher: Optional[Matchable] = None
-
-    def __call__(self, matcher: Matchable) -> Matcher:
-        """
-        :param matcher: The :class:`Matcher` to apply on the extracted slice.
-        """
-        if self.matcher is not None:
-            raise RuntimeError('Slice already has a Matcher added')
-        self.matcher = matcher
-        return self
-
-    def _matches(self, other: Any) -> bool:
-        if self.matcher is None:
-            raise RuntimeError(f"Cannot use Slice without specifying a Matcher. Try Slice[{self.slice}](In('abc'))")
-        sliced = other[self.slice]
-        return self.nested_match(self.matcher, sliced)
-
-    def _description(self) -> str:
-        return repr(self.matcher) if self.matcher is not None else '!NO MATCHERS!'
-
-
-class _SliceFactory:
-    def __getitem__(self, slice_: Union[int, slice]) -> _Slice:
+    def __getitem__(self, slice_: Union[int, slice]) -> _SliceTransformer:
         """
         :param slice_: The :class:`slice` to slice from the matched object.
         """
-        return _Slice(slice_)
+        return _SliceTransformer(slice_)
 
 
 Slice = _SliceFactory()
