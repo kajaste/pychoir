@@ -27,20 +27,17 @@ Containers
 .. autoclass:: ContainsNoneOf
 .. autoclass:: DictContainsAllOf
 .. autoclass:: HasLength
+.. autoclass:: Len
 .. autoclass:: InAnyOrder
 .. autoclass:: IsEmpty
 .. autoclass:: IsNotPresentOr
 .. autoattribute:: containers.NotPresent
-.. autoclass:: Len
 .. autoclass:: First
    :special-members: __call__
 .. autoclass:: Last
    :special-members: __call__
 .. autoattribute:: containers.Slice
-.. autoclass:: pychoir.containers._SliceFactory
-   :special-members: __getitem__
-.. autoclass:: pychoir.containers._Slice
-   :special-members: __call__
+.. autoclass:: pychoir.containers::_SliceFactory
 
 Core
 ----

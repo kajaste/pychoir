@@ -127,16 +127,14 @@ def test_first():
     assert 'abcdef' == First(3)('abc')
     assert [1, 2, 3, 'a', 'b', 'c'] == First(3)(All(IsInstance(int)))
     assert [1, 2, 3, 'a', 'b', 'c'] != First(4)(All(IsInstance(int)))
-    assert [1, 2, 3] == First(3)(IsInstance(list))
+    assert [1, 2, 3] == First()(1)
 
-    with pytest.raises(RuntimeError) as rte_info:
+    with pytest.raises(AssertionError):
         assert [1, 2, 3] == First(2)
-    assert (str(rte_info.value).split('\n')[0]
-            == "Cannot use First without specifying a Matcher. Try First(2)(In('abc'))")
 
-    with pytest.raises(RuntimeError) as rte_info:
+    with pytest.raises(TypeError) as te_info:
         assert [1, 2, 3] == First(2)([0, 1])([2])  # type: ignore
-    assert str(rte_info.value).split('\n')[0] == "First already has a Matcher added"
+    assert str(te_info.value).split('\n')[0] == "'_First' object is not callable"
 
     with pytest.raises(AssertionError) as exc_info:
         assert [1, 2, 3] == First(2)([0, 1])
@@ -147,16 +145,14 @@ def test_last():
     assert 'abcdef' == Last(3)('def')
     assert [1, 2, 3, 'a', 'b', 'c'] == Last(3)(All(IsInstance(str)))
     assert [1, 2, 3, 'a', 'b', 'c'] != Last(4)(All(IsInstance(str)))
-    assert [1, 2, 3] == Last(3)(IsInstance(list))
+    assert [1, 2, 3] == Last()(3)
 
-    with pytest.raises(RuntimeError) as rte_info:
+    with pytest.raises(AssertionError):
         assert [1, 2, 3] == Last(2)
-    assert (str(rte_info.value).split('\n')[0]
-            == "Cannot use Last without specifying a Matcher. Try Last(2)(In('abc'))")
 
-    with pytest.raises(RuntimeError) as rte_info:
+    with pytest.raises(TypeError) as te_info:
         assert [1, 2, 3] == Last(2)([0, 1])([2])  # type: ignore
-    assert str(rte_info.value).split('\n')[0] == "Last already has a Matcher added"
+    assert str(te_info.value) == "'_Last' object is not callable"
 
     with pytest.raises(AssertionError) as exc_info:
         assert [1, 2, 3] == Last(2)([1, 2])
@@ -168,14 +164,12 @@ def test_slice():
     assert 'abcdef' == Slice[:3](All(LessThan('d')))
     assert [1, 2, 3] == Slice[1](EqualTo(2))
 
-    with pytest.raises(RuntimeError) as rte_info:
+    with pytest.raises(AssertionError):
         assert [1, 2, 3] == Slice[2]
-    assert (str(rte_info.value).split('\n')[0]
-            == "Cannot use Slice without specifying a Matcher. Try Slice[2](In('abc'))")
 
-    with pytest.raises(RuntimeError) as rte_info:
+    with pytest.raises(TypeError) as te_info:
         assert [1, 2, 3] == Slice[2:3]([0, 1])([2])  # type: ignore
-    assert str(rte_info.value).split('\n')[0] == "Slice already has a Matcher added"
+    assert str(te_info.value) == "'_Slice' object is not callable"
 
     with pytest.raises(AssertionError) as exc_info:
         assert [1, 2, 3] == Slice[0](EqualTo(0))
