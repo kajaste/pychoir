@@ -3,7 +3,7 @@
 [![Wheel](https://pypip.in/wheel/PyHamcrest/badge.svg)](https://pypi.python.org/pypi/pychoir)
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pychoir.svg)](https://pypi.python.org/pypi/pychoir/)
 [![GitHub Actions (Tests)](https://github.com/kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
-[![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=latest)](https://pychoir.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=stable)](https://pychoir.readthedocs.io/en/stable/?badge=latest)
 
 Super duper low cognitive overhead matching for Python developers reading or writing tests. Implemented in pure Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8 and 3.9. PyPy (3.6, 3.7) works fine too.
 
@@ -14,7 +14,7 @@ Super duper low cognitive overhead matching for Python developers reading or wri
 * With pipenv: `pipenv install --dev pychoir`
 
 ## Documentation
-Check out the API Reference on readthedocs for detailed info on all the available Matchers [https://pychoir.readthedocs.io/en/latest/api.html](https://pychoir.readthedocs.io/en/latest/api.html)
+Check out the API Reference on readthedocs for detailed info on all the available Matchers [https://pychoir.readthedocs.io/en/stable/api.html](https://pychoir.readthedocs.io/en/stable/api.html)
 
 ## Why?
 
