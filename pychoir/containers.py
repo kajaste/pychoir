@@ -203,9 +203,11 @@ class DictContainsAllOf(Matcher):
 
 
 class InAnyOrder(Matcher):
-    """A Matcher checking that a Sequence contains *exactly* the passed items, in any order.
+    """A Matcher checking that an Iterable contains *exactly* the passed items, in any order.
 
-    :param values: A Sequence containing the expected items, in any order.
+    The Iterable can be for example a list, tuple or set.
+
+    :param values: An Iterable containing the expected items, in any order.
 
     Usage:
       >>> from pychoir import InAnyOrder
@@ -216,7 +218,7 @@ class InAnyOrder(Matcher):
       >>> [{'a': 1}, {'b': 2}] == InAnyOrder([{'b': 2}, {'a': 1}])
       True
     """
-    def __init__(self, values: Sequence[Any]):
+    def __init__(self, values: Iterable[Any]):
         super().__init__()
         self.expected_values = values
 
