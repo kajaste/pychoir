@@ -205,7 +205,7 @@ class DictContainsAllOf(Matcher):
 class InAnyOrder(Matcher):
     """A Matcher checking that an Iterable contains *exactly* the passed items, in any order.
 
-    The Iterable can be for example a list, tuple or set.
+    The Iterable can be for example a list, tuple or set. Items do not need to be hashable.
 
     :param values: An Iterable containing the expected items, in any order.
 
@@ -230,6 +230,32 @@ class InAnyOrder(Matcher):
             except ValueError:
                 return False
         return not values_left
+
+    def _description(self) -> str:
+        return repr(self.expected_values)
+
+
+class SetEquals(Matcher):
+    """A Matcher checking that an Iterable has the expected items, duplicates ignored.
+    Faster than :class:`InAnyOrder` but less pedantic about duplicates and requires hashable items.
+
+    The Iterable can be for example a list, tuple or set. Items must be hashable.
+
+    :param values: An Iterable containing the expected items, in any order.
+
+    Usage:
+      >>> from pychoir import SetEquals
+      >>> [1, 2, 3, 3] == SetEquals([3, 2, 1])
+      True
+      >>> [1, 2] == SetEquals([3, 2, 1])
+      False
+    """
+    def __init__(self, values: Iterable[Any]):
+        super().__init__()
+        self.expected_values = values
+
+    def _matches(self, other: Iterable[Any]) -> bool:
+        return set(self.expected_values) == set(other)
 
     def _description(self) -> str:
         return repr(self.expected_values)

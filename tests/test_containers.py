@@ -24,6 +24,7 @@ from pychoir import (
     LessThan,
     Matcher,
     NotPresent,
+    SetEquals,
     Slice,
 )
 
@@ -106,8 +107,22 @@ def test_in_any_order():
 
     assert {1, 2, 3} == InAnyOrder({3, 2, 1})
     assert {1, 2, 3} == InAnyOrder((3, 2, 1))
+    assert [{'a': 1}, {'b': 2}] == InAnyOrder([{'b': 2}, {'a': 1}])
 
     assert str(InAnyOrder([1, 2, 3])) == 'InAnyOrder([1, 2, 3])'
+
+
+def test_set_equals():
+    assert [1, 2, 3] == SetEquals([3, 2, 1])
+    assert [1, 2, 3] != SetEquals([3, 2])
+    assert [1, 2, 3] != SetEquals([3, 2, 1, 0])
+    assert [1, 2, 2] == SetEquals([2, 1, 2])
+    assert [1, 2, 2] == SetEquals([1, 1, 2])
+
+    assert {1, 2, 3} == SetEquals({3, 2, 1})
+    assert {1, 2, 3} == SetEquals((3, 2, 1))
+
+    assert str(SetEquals([1, 2, 3])) == 'SetEquals([1, 2, 3])'
 
 
 def test_is_not_present_or():

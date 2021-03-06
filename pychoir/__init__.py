@@ -27,6 +27,7 @@ from .containers import (  # noqa: F401
     Last,
     Len,
     NotPresent,
+    SetEquals,
     Slice,
 )
 from .core import Matchable, Matcher, that  # noqa: F401
