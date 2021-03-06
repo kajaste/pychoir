@@ -117,14 +117,13 @@ What a nice fluent API for matching, allowing matching multiple things at once. 
 
 I'd be happy to hear from you about other similar libraries.
 
-
 ## What is it based on?
 
 Python has a rather peculiar way of handling equivalence, which allows customizing it in wild and imaginative ways. This is a very powerful feature, which one should usually avoid overusing. `pychoir` is built around the idea of using this power to build a lean and mean matcher implementation that looks like a custom DSL but is actually completely standard Python 3.
 
 ## What is the project status?
 
-Today, after about a month and a thousand downloads since the first release, `pychoir` has quite a nice range of Matchers built-in as well as basic API Reference documenting them. New ideas are still plenty and more can be discussed in [Discussions](https://github.com/kajaste/pychoir/discussions). Documentation will receive updates as well. Most remarkably fancy examples are missing. Making `pychoir` easier to contribute to is also on the list.
+Today, after a couple of months and a few thousand downloads since the first release, `pychoir` has quite a nice range of Matchers built in as well as basic API Reference documenting them. New ideas are still plenty and more can be discussed in [Discussions](https://github.com/kajaste/pychoir/discussions). Documentation will receive updates as well. Most remarkably fancy examples are missing. Making `pychoir` easier to contribute to is also on the list.
 
 ## Where does the name come from?
 
