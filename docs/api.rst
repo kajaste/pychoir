@@ -31,6 +31,7 @@ Containers
 .. autoclass:: InAnyOrder
 .. autoclass:: IsEmpty
 .. autoclass:: IsNotPresentOr
+.. autoclass:: SetEquals
 .. autoattribute:: containers.NotPresent
 .. autoclass:: First
    :special-members: __call__
