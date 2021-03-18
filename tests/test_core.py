@@ -1,6 +1,6 @@
 import sys
 from typing import Any, Dict, List, cast
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -86,24 +86,6 @@ class TestMatcher:
         assert Anything().nested_match(1, 1, expect_mismatch=True)
         assert not Anything().nested_match(1, 2)
         assert not Anything().nested_match(1, 2, expect_mismatch=True)
-
-    @patch('warnings.warn')
-    def test_warn_when_reusing(self, warn_mock: MagicMock) -> None:
-        instance = self._TestMatcher(True)
-        assert instance == 1
-        warn_mock.assert_not_called()
-        assert instance == 2
-        warn_mock.assert_called_once_with(
-            'Erroneous re-run of _TestMatcher(does_match=True). Create a new Matcher instance for each use!'
-        )
-
-    @patch('warnings.warn')
-    def test_nested_match_allows_reuse(self, warn_mock: MagicMock) -> None:
-        instance = self._TestMatcher(True)
-        assert Anything().nested_match(instance, 1)
-        warn_mock.assert_not_called()
-        assert Anything().nested_match(instance, 2)
-        warn_mock.assert_not_called()
 
 
 def test_matcher_in_mock_call_params():
