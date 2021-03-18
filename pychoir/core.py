@@ -1,5 +1,4 @@
 import sys
-import warnings
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from enum import Enum
@@ -173,9 +172,6 @@ class Matcher(ABC):
     def matches(self, other: MatchedType, context: _MatcherContext) -> bool:
         with self.__set_context(context):
             passed = self._matches(other)
-
-        if not context.nested_call and self.__state.was_already_run:
-            warnings.warn(f'Erroneous re-run of {self}. Create a new Matcher instance for each use!')
 
         reported_passed = passed if not context.mismatch_expected else not passed
         self.__state.update(reported_passed, other)
