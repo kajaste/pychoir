@@ -1,7 +1,7 @@
 import sys
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
-from enum import Enum
+from enum import Enum, auto
 from typing import Any, Callable, Iterator, List, Optional, Tuple, Type, TypeVar, Union
 
 from pychoir.utils import sequence_or_its_only_member
@@ -39,12 +39,29 @@ class _MatcherStatus(str, Enum):
     FAILED = 'FAILED'
 
 
+class _MatcherDirection(Enum):
+    EQ = auto()
+    NE = auto()
+
+    @classmethod
+    def from_mismatch_expected(cls, mismatch_expected: bool) -> '_MatcherDirection':
+        return cls.NE if mismatch_expected else cls.EQ
+
+
 class _MatcherState:
     def __init__(self, status: _MatcherStatus = _MatcherStatus.NOT_RUN):
         self.__status: _MatcherStatus = status
+        self.__direction: Optional[_MatcherDirection] = None
         self.__failed_values: List[Any] = []
 
-    def update(self, passed: bool, value: Any) -> None:
+    def update(self, passed: bool, mismatch_expected: bool, value: Any) -> None:
+        direction = _MatcherDirection.from_mismatch_expected(mismatch_expected)
+        if self.__direction is None:
+            self.__direction = direction
+        elif self.__direction != direction:
+            # pytest assert rewrite flips comparison on failure, let's not count that
+            return
+
         if passed:
             self.__add_success()
         else:
@@ -174,7 +191,7 @@ class Matcher(ABC):
             passed = self._matches(other)
 
         reported_passed = passed if not context.mismatch_expected else not passed
-        self.__state.update(reported_passed, other)
+        self.__state.update(reported_passed, context.mismatch_expected, other)
 
         return passed
 

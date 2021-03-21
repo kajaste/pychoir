@@ -1,4 +1,5 @@
 import sys
+from contextlib import contextmanager
 from typing import Any, Dict, List, cast
 from unittest.mock import MagicMock
 
@@ -28,14 +29,14 @@ def test_matchable():
 class TestMatcher:
     class _TestMatcher(Matcher):
         def __init__(self, does_match: bool):
-            super().__init__()
+            super().__init__(override_name='Matcher')
             self.does_match = does_match
 
         def _matches(self, other: Any) -> bool:
             return self.does_match
 
         def _description(self) -> str:
-            return f'does_match={self.does_match}'
+            return f'{self.does_match}'
 
     def test_as(self):
         instance = self._TestMatcher(True)
@@ -53,34 +54,51 @@ class TestMatcher:
         assert 0 != self._TestMatcher(False)
 
     def test_str(self):
-        assert str(self._TestMatcher(True)) == '_TestMatcher(does_match=True)'
+        assert str(self._TestMatcher(True)) == 'Matcher(True)'
 
     def test_repr(self):
-        assert repr(self._TestMatcher(True)) == '_TestMatcher(does_match=True)'
+        assert repr(self._TestMatcher(True)) == 'Matcher(True)'
 
     def test_failure_report(self):
-        with pytest.raises(AssertionError) as excinfo:
+        with pytest.raises(AssertionError) as exc_info:
             assert 'foo' == self._TestMatcher(False)
-        assert "_TestMatcher(does_match=False)[FAILED for 'foo']" in str(excinfo.value)
+        assert "Matcher(False)[FAILED for 'foo']" in str(exc_info.value)
+
+    def test_failure_report_on_mismatch_outside_matcher(self):
+        with pytest.raises(AssertionError) as exc_info:
+            matching_matcher = self._TestMatcher(True)
+            assert {'a': 1, 'b': 0} == {'a': matching_matcher, 'b': 1}
+        assert "assert {'a': 1, 'b': 0} == {'a': Matcher(True), 'b': 1}" in str(exc_info.value)
+        assert str(matching_matcher) == 'Matcher(True)'
 
     def test_nested_match(self):
-        matching_matcher = self._TestMatcher(True)
-        assert str(matching_matcher) == '_TestMatcher(does_match=True)'
-        assert Anything().nested_match(matching_matcher, 1)
-        assert str(matching_matcher) == '_TestMatcher(does_match=True)'
-        assert Anything().nested_match(matching_matcher, 1, expect_mismatch=True)
-        assert str(matching_matcher) == '_TestMatcher(does_match=True)[FAILED for 1]'
-        assert Anything().nested_match(matching_matcher, 2, expect_mismatch=True)
-        assert str(matching_matcher) == '_TestMatcher(does_match=True)[FAILED for (1, 2)]'
+        @contextmanager
+        def new_matching_matcher():
+            yield self._TestMatcher(True)
+        with new_matching_matcher() as matching_matcher:
+            assert str(matching_matcher) == 'Matcher(True)'
+        with new_matching_matcher() as matching_matcher:
+            assert Anything().nested_match(matching_matcher, 1)
+            assert str(matching_matcher) == 'Matcher(True)'
+        with new_matching_matcher() as matching_matcher:
+            assert Anything().nested_match(matching_matcher, 1, expect_mismatch=True)
+            assert str(matching_matcher) == 'Matcher(True)[FAILED for 1]'
+            assert Anything().nested_match(matching_matcher, 2, expect_mismatch=True)
+            assert str(matching_matcher) == 'Matcher(True)[FAILED for (1, 2)]'
 
-        mismatching_matcher = self._TestMatcher(False)
-        assert str(mismatching_matcher) == '_TestMatcher(does_match=False)'
-        assert not Anything().nested_match(mismatching_matcher, 3, expect_mismatch=True)
-        assert str(mismatching_matcher) == '_TestMatcher(does_match=False)'
-        assert not Anything().nested_match(mismatching_matcher, 3)
-        assert str(mismatching_matcher) == '_TestMatcher(does_match=False)[FAILED for 3]'
-        assert not Anything().nested_match(mismatching_matcher, 4)
-        assert str(mismatching_matcher) == '_TestMatcher(does_match=False)[FAILED for (3, 4)]'
+        @contextmanager
+        def new_mismatching_matcher():
+            yield self._TestMatcher(False)
+        with new_mismatching_matcher() as mismatching_matcher:
+            assert str(mismatching_matcher) == 'Matcher(False)'
+        with new_mismatching_matcher() as mismatching_matcher:
+            assert not Anything().nested_match(mismatching_matcher, 3, expect_mismatch=True)
+            assert str(mismatching_matcher) == 'Matcher(False)'
+        with new_mismatching_matcher() as mismatching_matcher:
+            assert not Anything().nested_match(mismatching_matcher, 3)
+            assert str(mismatching_matcher) == 'Matcher(False)[FAILED for 3]'
+            assert not Anything().nested_match(mismatching_matcher, 4)
+            assert str(mismatching_matcher) == 'Matcher(False)[FAILED for (3, 4)]'
 
         assert Anything().nested_match(1, 1)
         assert Anything().nested_match(1, 1, expect_mismatch=True)
