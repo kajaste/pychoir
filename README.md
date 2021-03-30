@@ -12,6 +12,7 @@ Super duper low cognitive overhead matching for Python developers reading or wri
 ## Installation
 * With pip: `pip install pychoir`
 * With pipenv: `pipenv install --dev pychoir`
+* With poetry: `poetry add --dev pychoir`
 
 ## Documentation
 Check out the API Reference on readthedocs for detailed info on all the available Matchers [https://pychoir.readthedocs.io/en/stable/api.html](https://pychoir.readthedocs.io/en/stable/api.html)
