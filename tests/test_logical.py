@@ -1,6 +1,5 @@
 from contextlib import contextmanager
 from typing import Iterator
-from unittest.mock import patch
 
 from pychoir import (
     NE,
@@ -62,15 +61,13 @@ def test_not_or():
         assert str(not_or_123) == 'Not(Or(EqualTo(1)[FAILED for 4], 2, 3)[FAILED for 4])[FAILED for 4]'
 
     with make_not_or_123() as not_or_123:
-        with patch('warnings.warn'):  # Suppress warnings from using the same matcher many times
-            for i in (1, 2, 3):
-                assert i != not_or_123
+        for i in (1, 2, 3):
+            assert i != not_or_123
         assert str(not_or_123) == 'Not(Or(EqualTo(1), 2, 3))'
 
     with make_not_or_123() as not_or_123:
-        with patch('warnings.warn'):  # Suppress warnings from using the same matcher many times
-            for i in (1, 2, 3):
-                assert not i == not_or_123
+        for i in (1, 2, 3):
+            assert not i == not_or_123
         assert str(not_or_123) == 'Not(Or(EqualTo(1)[FAILED for 1], 2, 3)[FAILED for (1, 2, 3)])[FAILED for (1, 2, 3)]'
 
 
@@ -195,7 +192,7 @@ def test_not_not():
 
     with make_not_not_eq_one_eq_two() as not_not_eq_one_eq_two:
         assert 2 == not_not_eq_one_eq_two
-        assert str(not_not_eq_one_eq_two) == 'Not(Not(EqualTo(1)[FAILED for 2], EqualTo(2)))'
+        assert str(not_not_eq_one_eq_two) == 'Not(Not(EqualTo(1), EqualTo(2)))'
 
 
 def test_results_true_for():
