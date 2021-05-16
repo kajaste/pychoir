@@ -94,8 +94,8 @@ def test_dict_contains_all_of():
     assert not test_input == DictContainsAllOf({'a': [1]})
     assert not test_input == DictContainsAllOf({'a': [1, 2, 3], 'b': 4, 'c': 'extra', 'e': 'not there'})
 
-    assert (str(DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4}))
-            == "DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4})")
+    assert (str(DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4, 'd': NotPresent}))
+            == "DictContainsAllOf({'a': And(HasLength(3), All(IsInstance(int))), 'b': 4, 'd': NotPresent})")
 
 
 def test_in_any_order():

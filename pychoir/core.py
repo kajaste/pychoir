@@ -49,10 +49,11 @@ class _MatcherDirection(Enum):
 
 
 class _MatcherState:
-    def __init__(self, status: _MatcherStatus = _MatcherStatus.NOT_RUN):
-        self.__status: _MatcherStatus = status
+    def __init__(self) -> None:
+        self.__status: _MatcherStatus = _MatcherStatus.NOT_RUN
         self.__direction: Optional[_MatcherDirection] = None
         self.__failed_values: List[Any] = []
+        self.__nested_calls: List[Matcher] = []
 
     def update(self, passed: bool, mismatch_expected: bool, value: Any) -> None:
         direction = _MatcherDirection.from_mismatch_expected(mismatch_expected)
@@ -67,10 +68,18 @@ class _MatcherState:
         else:
             self.__add_failure(value)
 
+    def add_nested_call(self, matcher: 'Matcher') -> None:
+        self.__nested_calls.append(matcher)
+
     def reset_failures(self) -> None:
         if self.__status == _MatcherStatus.FAILED:
             self.__status = _MatcherStatus.NOT_RUN
             self.__failed_values = []
+        self.__reset_nested_failures()
+
+    def __reset_nested_failures(self) -> None:
+        for nested_call in self.__nested_calls:
+            nested_call._reset_nested_failures()
 
     @property
     def status(self) -> _MatcherStatus:
@@ -91,6 +100,8 @@ class _MatcherState:
     def __add_success(self) -> None:
         if not self.was_already_run:
             self.__status = _MatcherStatus.PASSED
+        if not self.__status == _MatcherStatus.FAILED:
+            self.__reset_nested_failures()
 
 
 class _MatcherContext:
@@ -101,10 +112,6 @@ class _MatcherContext:
     @property
     def mismatch_expected(self) -> bool:
         return self.__mismatch_expected
-
-    @property
-    def nested_call(self) -> bool:
-        return self.__nested_call
 
 
 class Matcher(ABC):
@@ -138,32 +145,24 @@ class Matcher(ABC):
             expect_mismatch = not expect_mismatch
 
         if isinstance(matcher, Matcher):
+            self.__state.add_nested_call(matcher)
             return matcher.matches(other, _MatcherContext(mismatch_expected=expect_mismatch, nested_call=True))
         else:
             return matcher == other
 
     @final
-    def nested_reset(
+    def _reset_nested_failures(
         self,
-        matcher: Union['Matcher', Matchable],
     ) -> None:
         """For resetting failure state of child matchers in case of passing due to other Matchers.
 
         For example in :class:`Or`, it is enough that one child Matcher passes.
         The matchers tried up to that point should not report failure.
-        After a match, :class:`Or` should call `self.nested_reset(matcher)` for all its Matchers.
+        After a Matcher reports a success, nested failures get reset automatically.
 
-        :param matcher: The value or Matcher to reset (nothing will be done for non-Matchers).
+        It is unlikely that you should ever call this from your tests or custom Matchers yourself.
         """
-        if isinstance(matcher, Matcher):
-            return matcher.__state.reset_failures()
-
-    @final
-    @property
-    def expected_result(self) -> bool:
-        if self.__context is None:
-            raise RuntimeError('expected_result is only available while in match context')
-        return not self.__context.mismatch_expected
+        self.__state.reset_failures()
 
     @abstractmethod
     def _matches(self, other: MatchedType) -> bool:
@@ -277,4 +276,4 @@ def that(value: MatchedType) -> MatcherWrapper:
 class Transformer(ABC):
     @abstractmethod
     def __call__(self, matcher: Matchable) -> Matcher:
-        ...
+        ...  # pragma: no cover
