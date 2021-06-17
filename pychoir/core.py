@@ -116,9 +116,9 @@ class _MatcherContext:
 
 class Matcher(ABC):
     """The baseclass for all Matchers."""
-    def __init__(self, override_name: Optional[str] = None) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.__name = override_name if override_name is not None else self.__class__.__name__
+        self.__name = self.__class__.__name__
         self.__state = _MatcherState()
         self.__context: Optional[_MatcherContext] = None
 
@@ -149,6 +149,10 @@ class Matcher(ABC):
             return matcher.matches(other, _MatcherContext(mismatch_expected=expect_mismatch, nested_call=True))
         else:
             return matcher == other
+
+    @final
+    def _override_name(self, name: str) -> None:
+        self.__name = name
 
     @final
     def _reset_nested_failures(

@@ -29,7 +29,8 @@ def test_matchable():
 class TestMatcher:
     class _TestMatcher(Matcher):
         def __init__(self, does_match: bool):
-            super().__init__(override_name='Matcher')
+            super().__init__()
+            super()._override_name('Matcher')
             self.does_match = does_match
 
         def _matches(self, other: Any) -> bool:
