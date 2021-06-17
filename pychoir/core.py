@@ -124,7 +124,7 @@ class Matcher(ABC):
 
     def as_(self, type_: Type[T]) -> T:
         """To make matchers pass type checking."""
-        return self  # type: ignore
+        return self  # type: ignore[return-value]
 
     @final
     def nested_match(
