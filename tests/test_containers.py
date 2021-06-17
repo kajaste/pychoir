@@ -151,7 +151,7 @@ def test_first():
         assert [1, 2, 3] == First(2)
 
     with pytest.raises(TypeError) as te_info:
-        assert [1, 2, 3] == First(2)([0, 1])([2])  # type: ignore
+        assert [1, 2, 3] == First(2)([0, 1])([2])  # type: ignore[operator]
     assert str(te_info.value).split('\n')[0] == "'_First' object is not callable"
 
     with pytest.raises(AssertionError) as exc_info:
@@ -169,7 +169,7 @@ def test_last():
         assert [1, 2, 3] == Last(2)
 
     with pytest.raises(TypeError) as te_info:
-        assert [1, 2, 3] == Last(2)([0, 1])([2])  # type: ignore
+        assert [1, 2, 3] == Last(2)([0, 1])([2])  # type: ignore[operator]
     assert str(te_info.value) == "'_Last' object is not callable"
 
     with pytest.raises(AssertionError) as exc_info:
@@ -186,7 +186,7 @@ def test_slice():
         assert [1, 2, 3] == Slice[2]
 
     with pytest.raises(TypeError) as te_info:
-        assert [1, 2, 3] == Slice[2:3]([0, 1])([2])  # type: ignore
+        assert [1, 2, 3] == Slice[2:3]([0, 1])([2])  # type: ignore[operator]
     assert str(te_info.value) == "'_Slice' object is not callable"
 
     with pytest.raises(AssertionError) as exc_info:
