@@ -148,7 +148,7 @@ class Matcher(ABC):
             self.__state.add_nested_call(matcher)
             return matcher.matches(other, _MatcherContext(mismatch_expected=expect_mismatch, nested_call=True))
         else:
-            return matcher == other
+            return bool(matcher == other)
 
     @final
     def _override_name(self, name: str) -> None:
