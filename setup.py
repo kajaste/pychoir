@@ -1,6 +1,6 @@
 import setuptools
 
-from version import version
+from pychoir.__version__ import version
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -14,7 +14,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/kajaste/pychoir",
-    packages=setuptools.find_packages(),
+    packages=['pychoir'],
     package_data={"pychoir": ["py.typed"]},
     classifiers=[
         "Programming Language :: Python :: 3",
