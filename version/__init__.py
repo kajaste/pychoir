@@ -4,7 +4,8 @@ from typing import Optional
 
 def version_from_git() -> Optional[str]:
     try:
-        return subprocess.check_output(['git', 'describe', '--tag'], universal_newlines=True).rstrip('\n')
+        describe = subprocess.check_output(['git', 'describe', '--tag'], universal_newlines=True).rstrip('\n')
+        return describe[1:]
     except subprocess.SubprocessError:
         return None
 
