@@ -1,6 +1,6 @@
 import setuptools
 
-from pychoir.__version__ import version
+from version import version
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
