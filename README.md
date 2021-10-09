@@ -5,7 +5,7 @@
 [![GitHub Actions (Tests)](https://github.com/kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
 [![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=stable)](https://pychoir.readthedocs.io/en/stable/?badge=latest)
 
-Super duper low cognitive overhead matching for Python developers reading or writing tests. Implemented in pure Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8 and 3.9. PyPy (3.6, 3.7) works fine too.
+Super duper low cognitive overhead matching for Python developers reading or writing tests. Implemented in pure Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8, 3.9 and 3.10. PyPy (3.6, 3.7) works fine too.
 
 `pychoir` has mostly been developed for use with `pytest`, but nothing prevents from using it in any other test framework (like vanilla `unittest`) or even outside of testing, if you feel like it.
 
@@ -124,7 +124,7 @@ Python has a rather peculiar way of handling equivalence, which allows customizi
 
 ## What is the project status?
 
-Today, after a couple of months and a few thousand downloads since the first release, `pychoir` has quite a nice range of Matchers built in as well as basic API Reference documenting them. New ideas are still plenty and more can be discussed in [Discussions](https://github.com/kajaste/pychoir/discussions). Documentation will receive updates as well. Most remarkably fancy examples are missing. Making `pychoir` easier to contribute to is also on the list.
+`pychoir` has quite a semi-vast range of Matchers built in as well as basic API Reference documenting them. New ideas are still plenty and more can be discussed in [Discussions](https://github.com/kajaste/pychoir/discussions). Documentation will receive updates as well. Most remarkably fancy examples are missing. Making `pychoir` easier to contribute to is also on the list.
 
 ## Where does the name come from?
 
