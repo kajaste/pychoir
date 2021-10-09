@@ -1,6 +1,5 @@
 # `pychoir` - Python Test Matchers for humans
 [![PyPI version](http://img.shields.io/pypi/v/pychoir)](https://pypi.python.org/pypi/pychoir)
-[![Wheel](https://pypip.in/wheel/PyHamcrest/badge.svg)](https://pypi.python.org/pypi/pychoir)
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pychoir.svg)](https://pypi.python.org/pypi/pychoir/)
 [![GitHub Actions (Tests)](https://github.com/kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
 [![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=stable)](https://pychoir.readthedocs.io/en/stable/?badge=latest)
