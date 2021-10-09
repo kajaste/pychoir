@@ -16,6 +16,10 @@ setuptools.setup(
     url="https://github.com/kajaste/pychoir",
     packages=['pychoir'],
     package_data={"pychoir": ["py.typed"]},
+    setup_requires=['setuptools-scm'],
+    use_scm_version=dict(
+        write_to='pychoir/_version.py',
+    ),
     classifiers=[
         "Programming Language :: Python :: 3",
         'Programming Language :: Python :: 3.6',
