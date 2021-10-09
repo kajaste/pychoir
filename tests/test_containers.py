@@ -7,6 +7,7 @@ from pychoir import (
     All,
     And,
     AreNot,
+    Contains,
     ContainsAllOf,
     ContainsAnyOf,
     ContainsNoneOf,
@@ -59,6 +60,13 @@ def test_are_not():
     assert not [1, 2, ''] == AreNot(IsInstance(str))
 
     assert str(AreNot(IsInstance(str))) == 'AreNot(IsInstance(str))'
+
+
+def test_contains():
+    assert {'a': [1, 2, 3]} == {'a': Contains(3)}
+    assert not ['12'] == [Contains('3')]
+
+    assert str([Contains('1')]) == "[Contains('1')]"
 
 
 def test_contains_all_of():

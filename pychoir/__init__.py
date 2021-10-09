@@ -15,6 +15,7 @@ from .comparisons import (  # noqa: F401
 from .containers import (  # noqa: F401
     All,
     AreNot,
+    Contains,
     ContainsAllOf,
     ContainsAnyOf,
     ContainsNoneOf,

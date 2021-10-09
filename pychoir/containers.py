@@ -104,8 +104,33 @@ class AreNot(Matcher):
         return ', '.join(map(repr, self.matchers))
 
 
+class Contains(Matcher):
+    """A Matcher checking that a container contains the passed value.
+
+    :param value: The value to find in the container.
+
+    Usage:
+      >>> from pychoir import Contains
+      >>> 'abc' == Contains('a')
+      True
+      >>> [1, 2, 3] == Contains(4)
+      False
+    """
+    def __init__(self, value: Any):
+        super().__init__()
+        self.value = value
+
+    def _matches(self, other: Any) -> bool:
+        return self.value in other
+
+    def _description(self) -> str:
+        return repr(self.value)
+
+
 class ContainsAllOf(Matcher):
     """A Matcher checking that a container contains *at least* the passed values.
+
+    Plural of :class:`Contains`.
 
     :param values: The value(s) to find in the container.
 
