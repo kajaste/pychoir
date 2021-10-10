@@ -63,6 +63,7 @@ package_clean:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf pychoir.egg-info/
+	rm -f pychoir/_version.py
 .PHONY: package_clean
 
 upload:

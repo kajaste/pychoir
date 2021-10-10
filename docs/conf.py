@@ -16,7 +16,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 
-from version import version
+from pychoir.__version__ import version
 import pychoir
 
 # -- Project information -----------------------------------------------------
