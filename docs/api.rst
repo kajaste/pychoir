@@ -22,6 +22,7 @@ Containers
 ----------
 .. autoclass:: All
 .. autoclass:: AreNot
+.. autoclass:: Contains
 .. autoclass:: ContainsAllOf
 .. autoclass:: ContainsAnyOf
 .. autoclass:: ContainsNoneOf
