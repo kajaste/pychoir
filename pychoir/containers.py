@@ -243,7 +243,7 @@ class InAnyOrder(Matcher):
       >>> [{'a': 1}, {'b': 2}] == InAnyOrder([{'b': 2}, {'a': 1}])
       True
     """
-    def __init__(self, values: Iterable[Any]):
+    def __init__(self, values: Iterable[Matchable]):
         super().__init__()
         self.expected_values = values
 

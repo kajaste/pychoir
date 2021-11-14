@@ -18,8 +18,10 @@ from pychoir import (
     HasLength,
     InAnyOrder,
     IsEmpty,
+    IsEven,
     IsInstance,
     IsNotPresentOr,
+    IsOdd,
     Last,
     Len,
     LessThan,
@@ -108,10 +110,11 @@ def test_dict_contains_all_of():
 
 def test_in_any_order():
     assert [1, 2, 3] == InAnyOrder([3, 2, 1])
+    assert [1, 2, 2] == InAnyOrder([2, 1, 2])
+    assert [1, 2, 3] == InAnyOrder([3, IsOdd(), IsEven()])
+    assert [1, 2, 2] != InAnyOrder([1, 1, 2])
     assert [1, 2, 3] != InAnyOrder([3, 2])
     assert [1, 2, 3] != InAnyOrder([3, 2, 1, 0])
-    assert [1, 2, 2] == InAnyOrder([2, 1, 2])
-    assert [1, 2, 2] != InAnyOrder([1, 1, 2])
 
     assert {1, 2, 3} == InAnyOrder({3, 2, 1})
     assert {1, 2, 3} == InAnyOrder((3, 2, 1))
