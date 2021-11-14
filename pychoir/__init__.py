@@ -44,5 +44,6 @@ from .existential import (  # noqa: F401
 )
 from .integration import M, MatcherLike, Matches  # noqa: F401
 from .logical import AllOf, And, AnyOf, IsNoneOf, Not, Or, ResultsTrueFor  # noqa: F401
+from .numeric import IsEven, IsNegative, IsNonNegative, IsOdd, IsPositive  # noqa: F401
 from .strings import EndsWith, MatchesRegex, StartsWith  # noqa: F401
 from .types import ConvertsTo, IsInstance, OfType  # noqa: F401
