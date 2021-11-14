@@ -81,6 +81,16 @@ Logical
 .. autoclass:: Or
 .. autoclass:: ResultsTrueFor
 
+
+Numeric
+-------
+.. autoclass:: IsEven
+.. autoclass:: IsOdd
+.. autoclass:: IsPositive
+.. autoclass:: IsNonNegative
+.. autoclass:: IsNegative
+
+
 Strings
 -------
 .. autoclass:: EndsWith
