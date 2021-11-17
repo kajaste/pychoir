@@ -1,7 +1,8 @@
 import sys
-from typing import Any, Iterable, Mapping, Optional, Sequence, Union
+from typing import Any, Iterable, Mapping, Optional, Sequence, Tuple, Union
 
 from pychoir.core import Matchable, Matcher, Transformer
+from pychoir.utils import i_removed
 
 if sys.version_info >= (3, 8):
     from typing import Protocol
@@ -248,13 +249,22 @@ class InAnyOrder(Matcher):
         self.expected_values = values
 
     def _matches(self, other: Iterable[Any]) -> bool:
-        values_left = [value for value in self.expected_values]
-        for value in other:
-            try:
-                values_left.remove(value)
-            except ValueError:
-                return False
-        return not values_left
+        return self._has_a_solution(tuple(self.expected_values), tuple(other))
+
+    def _has_a_solution(self, expected_left: Tuple[Any, ...], values_left: Tuple[Matchable, ...]) -> bool:
+        if not expected_left and not values_left:
+            return True  # expectations and values matched one-to-one
+        if not expected_left or not values_left:
+            return False  # expectations or values left but nothing to match with
+
+        expected_head, expected_tail = expected_left[0], expected_left[1:]
+        # try each remaining value against the expectation in turn
+        for i, value in enumerate(values_left):
+            if self.nested_match(expected_head, value):
+                # in case of a match, try to construct the rest of the solution
+                if self._has_a_solution(expected_tail, i_removed(values_left, i)):
+                    return True
+        return False  # no match in values for the expectation we were trying
 
     def _description(self) -> str:
         return repr(self.expected_values)
