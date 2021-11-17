@@ -1,3 +1,4 @@
+from itertools import permutations
 from typing import Any, Dict
 
 import pytest
@@ -111,9 +112,13 @@ def test_dict_contains_all_of():
 def test_in_any_order():
     assert [1, 2, 3] == InAnyOrder([3, 2, 1])
     assert [1, 2, 2] == InAnyOrder([2, 1, 2])
-    assert [1, 2, 3] == InAnyOrder([3, IsOdd(), IsEven()])
+    for matcher_permutation in permutations([lambda: 3, IsOdd, IsEven]):
+        for value_permutation in permutations([1, 2, 3]):
+            matcher_iterable = [f() for f in matcher_permutation]
+            assert value_permutation == InAnyOrder(matcher_iterable)
     assert [1, 2, 2] != InAnyOrder([1, 1, 2])
     assert [1, 2, 3] != InAnyOrder([3, 2])
+    assert [1, 2] != InAnyOrder([1, 2, 3])
     assert [1, 2, 3] != InAnyOrder([3, 2, 1, 0])
 
     assert {1, 2, 3} == InAnyOrder({3, 2, 1})

@@ -1,7 +1,7 @@
 """
 Useful extensions for standard library
 """
-from typing import Sequence, TypeVar, Union
+from typing import Any, Sequence, Tuple, TypeVar, Union
 
 T = TypeVar('T')
 
@@ -11,3 +11,7 @@ def sequence_or_its_only_member(sequence: Sequence[T]) -> Union[Sequence[T], T]:
         return sequence[0]
     else:
         return sequence
+
+
+def i_removed(tuple_: Tuple[Any, ...], index: Any) -> Tuple[Any, ...]:
+    return tuple_[:index] + tuple_[index + 1:]
