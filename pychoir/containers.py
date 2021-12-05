@@ -231,17 +231,21 @@ class DictContainsAllOf(Matcher):
 class InAnyOrder(Matcher):
     """A Matcher checking that an Iterable contains *exactly* the passed items, in any order.
 
-    The Iterable can be for example a list, tuple or set. Items do not need to be hashable.
+    The Iterable can be for example a list, tuple or set. Items can be Matchers and do not need to be hashable.
 
     :param values: An Iterable containing the expected items, in any order.
 
     Usage:
-      >>> from pychoir import InAnyOrder
+      >>> from pychoir import InAnyOrder, IsEven, IsOdd
       >>> [1, 2, 3, 3] == InAnyOrder([3, 2, 3, 1])
       True
-      >>> [1, 2] == InAnyOrder([3, 2, 1])
+      >>> [1, 2, 3] == InAnyOrder([3, 3, 2, 1])  # missing one 3
       False
-      >>> [{'a': 1}, {'b': 2}] == InAnyOrder([{'b': 2}, {'a': 1}])
+      >>> [1, 2, 3, 3] == InAnyOrder([3, 2, 1])  # one 3 too many
+      False
+      >>> [1, 2, 3] == InAnyOrder((1, 2, 3))  # type of the Iterable does not matter
+      True
+      >>> [{'a': 1}, {'b': 2}] == InAnyOrder([{'b': IsEven()}, {'a': IsOdd()}])
       True
     """
     def __init__(self, values: Iterable[Matchable]):
@@ -249,22 +253,18 @@ class InAnyOrder(Matcher):
         self.expected_values = values
 
     def _matches(self, other: Iterable[Any]) -> bool:
-        return self._has_a_solution(tuple(self.expected_values), tuple(other))
+        return self.__has_a_solution(tuple(self.expected_values), tuple(other))
 
-    def _has_a_solution(self, expected_left: Tuple[Any, ...], values_left: Tuple[Matchable, ...]) -> bool:
+    def __has_a_solution(self, expected_left: Tuple[Matchable, ...], values_left: Tuple[Any, ...]) -> bool:
         if not expected_left and not values_left:
             return True  # expectations and values matched one-to-one
         if not expected_left or not values_left:
             return False  # expectations or values left but nothing to match with
 
         expected_head, expected_tail = expected_left[0], expected_left[1:]
-        # try each remaining value against the expectation in turn
-        for i, value in enumerate(values_left):
-            if self.nested_match(expected_head, value):
-                # in case of a match, try to construct the rest of the solution
-                if self._has_a_solution(expected_tail, i_removed(values_left, i)):
-                    return True
-        return False  # no match in values for the expectation we were trying
+        return any(self.nested_match(expected_head, value) and
+                   self.__has_a_solution(expected_tail, i_removed(values_left, i))
+                   for i, value in enumerate(values_left))
 
     def _description(self) -> str:
         return repr(self.expected_values)
