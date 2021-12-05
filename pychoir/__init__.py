@@ -1,3 +1,6 @@
+from .core import Matchable, Matcher, that  # noqa: F401  # isort:skip
+
+from .callables import WhenPassedTo  # noqa: F401
 from .comparisons import (  # noqa: F401
     EQ,
     GT,
@@ -31,7 +34,6 @@ from .containers import (  # noqa: F401
     SetEquals,
     Slice,
 )
-from .core import Matchable, Matcher, that  # noqa: F401
 from .existential import (  # noqa: F401
     Anything,
     In,

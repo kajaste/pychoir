@@ -3,6 +3,10 @@
 API Reference
 =============
 
+Callables
+---------
+.. autoclass:: WhenPassedTo
+
 Comparisons
 -----------
 .. autoclass:: EqualTo
