@@ -278,6 +278,10 @@ def that(value: MatchedType) -> MatcherWrapper:
 
 
 class Transformer(ABC):
-    @abstractmethod
+    @final
     def __call__(self, matcher: Matchable) -> Matcher:
+        return self.matches(matcher)
+
+    @abstractmethod
+    def matches(self, matcher: Matchable) -> Matcher:
         ...  # pragma: no cover

@@ -368,7 +368,7 @@ class First(Transformer):
         self.how_many = how_many
         self.matcher: Optional[Matchable] = None
 
-    def __call__(self, matcher: Matchable) -> _First:
+    def matches(self, matcher: Matchable) -> _First:
         """
         :param matcher: The :class:`Matcher` to apply on the extracted slice.
         """
@@ -410,7 +410,7 @@ class Last(Transformer):
     def __init__(self, how_many: int = 1):
         self.how_many = how_many
 
-    def __call__(self, matcher: Matchable) -> _Last:
+    def matches(self, matcher: Matchable) -> _Last:
         """
         :param matcher: The :class:`Matcher` to apply on the extracted slice.
         """
@@ -438,7 +438,7 @@ class _SliceTransformer(Transformer):
     def __init__(self, slice_: Union[int, slice]) -> None:
         self.slice: Union[int, slice] = slice_
 
-    def __call__(self, matcher: Matchable) -> _Slice:
+    def matches(self, matcher: Matchable) -> _Slice:
         """
         :param matcher: The :class:`Matcher` to apply on the extracted slice.
         """
