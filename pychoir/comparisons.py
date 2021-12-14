@@ -11,8 +11,10 @@ class EqualTo(Matcher):
     :param value: The value to compare against.
 
     Usage:
-      >>> from pychoir import EqualTo
-      >>> 1 == EqualTo(1)
+      >>> from pychoir import All, EqualTo
+      >>> [1, 1, 1] == All(EqualTo(1))  # Bad, do not do this
+      True
+      >>> [1, 1, 1] == All(1)  # Good, do this instead
       True
     """
     def __init__(self, value: Any):
