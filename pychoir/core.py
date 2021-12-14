@@ -152,6 +152,13 @@ class Matcher(ABC):
 
     @final
     def _override_name(self, name: str) -> None:
+        """For Matchers whose class name does not match the call that creates them.
+
+        This applies, for example, to Matchers created by :class:`Transformer` s.
+
+        For example :class:`_First(Matcher)` (that is created by :class:`First(Transformer)`) uses
+        this method to make its name :code:`'First'` instead of :code:`'_First'` in its textual representation.
+        """
         self.__name = name
 
     @final
