@@ -12,6 +12,7 @@ from pychoir import (
     GreaterThan,
     InAnyOrder,
     IsInstance,
+    IsOdd,
     IsTruthy,
     Matchable,
     Matcher,
@@ -29,8 +30,7 @@ def test_matchable():
 class TestMatcher:
     class _TestMatcher(Matcher):
         def __init__(self, does_match: bool):
-            super().__init__()
-            super()._override_name('Matcher')
+            super().__init__(name='Matcher')
             self.does_match = does_match
 
         def _matches(self, other: Any) -> bool:
@@ -105,6 +105,48 @@ class TestMatcher:
         assert Anything().nested_match(1, 1, expect_mismatch=True)
         assert not Anything().nested_match(1, 2)
         assert not Anything().nested_match(1, 2, expect_mismatch=True)
+
+    def test_and_operator(self) -> None:
+        assert 5 == IsInstance(int) & 5
+        assert 5 != EqualTo(5) & IsInstance(float)
+
+        assert str(EqualTo(5) & IsInstance(int)) == '(EqualTo(5) & IsInstance(int))'
+
+        failing_and_operator = EqualTo(5) & IsInstance(float)
+        assert not 5 == failing_and_operator
+        assert str(failing_and_operator) == '(EqualTo(5) & IsInstance(float)[FAILED for 5])[FAILED for 5]'
+
+        one_and = EqualTo(5) & IsInstance(int)
+        another_and = IsOdd() & IsTruthy()
+        combo_and = one_and & another_and
+        assert 5 == combo_and
+        assert 6 != combo_and
+        assert str(combo_and) == '(EqualTo(5) & IsInstance(int) & IsOdd() & IsTruthy())'
+
+        and_and_normal = one_and & IsTruthy()
+        assert 5 == and_and_normal
+        assert str(and_and_normal) == '(EqualTo(5) & IsInstance(int) & IsTruthy())'
+
+    def test_or_operator(self) -> None:
+        assert 5 == IsInstance(float) | 5
+        assert 5 != EqualTo(6) | IsInstance(float)
+
+        assert str(EqualTo(5) | IsInstance(int)) == '(EqualTo(5) | IsInstance(int))'
+
+        failing_or_operator = EqualTo(5) | IsInstance(float)
+        assert not 6 == failing_or_operator
+        assert str(failing_or_operator) == '(EqualTo(5)[FAILED for 6] | IsInstance(float)[FAILED for 6])[FAILED for 6]'
+
+        one_or = EqualTo(5) | IsInstance(int)
+        another_or = IsOdd() | IsTruthy()
+        combo_or = one_or | another_or
+        assert 5 == combo_or
+        assert 6 == combo_or
+        assert str(combo_or) == '(EqualTo(5) | IsInstance(int) | IsOdd() | IsTruthy())'
+
+        or_or_normal = one_or | IsTruthy()
+        assert 6 == or_or_normal
+        assert str(or_or_normal) == (EqualTo(5) | IsInstance(int) | IsTruthy())
 
 
 def test_matcher_in_mock_call_params():

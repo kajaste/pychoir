@@ -5,16 +5,22 @@ from pychoir.core import Matcher
 
 class EqualTo(Matcher):
     """A somewhat redundant matcher checking for equality. Most Matchers can take
-    values and/or Matchers and **you should prefer bare values instead of wrapping them
+    values and/or Matchers and **you should prefer bare values to wrapping them
     in EqualTo**.
+
+    A notable exception is when used with & and | operators with a bare value on the left-most position
 
     :param value: The value to compare against.
 
     Usage:
-      >>> from pychoir import All, EqualTo
+      >>> from pychoir import All, EqualTo, IsInstance
       >>> [1, 1, 1] == All(EqualTo(1))  # Bad, do not do this
       True
       >>> [1, 1, 1] == All(1)  # Good, do this instead
+      True
+      >>> 1 == EqualTo(1) & IsInstance(int)  # Needed here, but see below
+      True
+      >>> 1 == IsInstance(int) & 1  # Bare value works here
       True
     """
     def __init__(self, value: Any):

@@ -114,7 +114,7 @@ def test_in_any_order():
     assert [1, 2, 2] == InAnyOrder([2, 1, 2])
     for matcher_permutation in permutations([lambda: 3, IsOdd, IsEven]):
         for value_permutation in permutations([1, 2, 3]):
-            matcher_iterable = [f() for f in matcher_permutation]
+            matcher_iterable = [f() for f in matcher_permutation]  # type: ignore[operator]
             assert value_permutation == InAnyOrder(matcher_iterable)
     assert [1, 2, 2] != InAnyOrder([1, 1, 2])
     assert [1, 2, 3] != InAnyOrder([3, 2])

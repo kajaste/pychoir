@@ -52,6 +52,7 @@ Core
 .. autoclass:: Matcher
    :members:
    :private-members:
+   :special-members: __and__, __or__, __repr__
 .. autofunction:: that
 .. autoclass:: pychoir.core.MatcherWrapper
    :members:
