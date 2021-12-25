@@ -32,8 +32,7 @@ class WhenPassedTo:
 
 class _Returns(Matcher):
     def __init__(self, callable_: Callable[[Any], Any], value: Any):
-        super().__init__()
-        super()._override_name('WhenPassedTo')
+        super().__init__(name='WhenPassedTo')
         self.callable = callable_
         self.value = value
 
@@ -48,8 +47,7 @@ class _Returns(Matcher):
 
 class _Raises(Matcher):
     def __init__(self, callable_: Callable[..., Any], exception: Optional[Type[Exception]]):
-        super().__init__()
-        super()._override_name('WhenPassedTo')
+        super().__init__(name='WhenPassedTo')
         self.callable = callable_
         self.exception = exception
 
@@ -73,8 +71,7 @@ class _Raises(Matcher):
 
 class _DoesNotRaise(Matcher):
     def __init__(self, callable_: Callable[..., Any]):
-        super().__init__()
-        super()._override_name('WhenPassedTo')
+        super().__init__(name='WhenPassedTo')
         self.callable = callable_
 
     def _matches(self, other: Any) -> bool:

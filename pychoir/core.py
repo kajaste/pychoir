@@ -2,9 +2,10 @@ import sys
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from enum import Enum, auto
+from itertools import chain
 from typing import Any, Callable, Iterator, List, Optional, Tuple, Type, TypeVar, Union
 
-from pychoir.utils import sequence_or_its_only_member
+from pychoir.utils import Default, DefaultType, sequence_or_its_only_member
 
 MatchedType = TypeVar('MatchedType', bound=Any)
 
@@ -115,15 +116,24 @@ class _MatcherContext:
 
 
 class Matcher(ABC):
-    """The baseclass for all Matchers."""
-    def __init__(self) -> None:
+    """The baseclass for all Matchers.
+
+    :param name:
+        For Matchers whose class name does not match the call that creates them.
+        This applies, for example, to Matchers created by :class:`Transformer` s.
+
+        For example :class:`_First(Matcher)` (that is created by :class:`First(Transformer)`) uses
+        this method to make its name :code:`'First'` instead of :code:`'_First'` in its textual representation.
+    """
+    def __init__(self, name: Union[DefaultType, Optional[str]] = Default) -> None:
         super().__init__()
-        self.__name = self.__class__.__name__
+        self.__name = self.__class__.__name__ if name is Default else name
         self.__state = _MatcherState()
         self.__context: Optional[_MatcherContext] = None
 
+    @final
     def as_(self, type_: Type[T]) -> T:
-        """To make matchers pass type checking."""
+        """Change the static type of the Matcher to make it pass type checking."""
         return self  # type: ignore[return-value]
 
     @final
@@ -150,31 +160,6 @@ class Matcher(ABC):
         else:
             return bool(matcher == other)
 
-    @final
-    def _override_name(self, name: str) -> None:
-        """For Matchers whose class name does not match the call that creates them.
-
-        This applies, for example, to Matchers created by :class:`Transformer` s.
-
-        For example :class:`_First(Matcher)` (that is created by :class:`First(Transformer)`) uses
-        this method to make its name :code:`'First'` instead of :code:`'_First'` in its textual representation.
-        """
-        self.__name = name
-
-    @final
-    def _reset_nested_failures(
-        self,
-    ) -> None:
-        """For resetting failure state of child matchers in case of passing due to other Matchers.
-
-        For example in :class:`Or`, it is enough that one child Matcher passes.
-        The matchers tried up to that point should not report failure.
-        After a Matcher reports a success, nested failures get reset automatically.
-
-        It is unlikely that you should ever call this from your tests or custom Matchers yourself.
-        """
-        self.__state.reset_failures()
-
     @abstractmethod
     def _matches(self, other: MatchedType) -> bool:
         """Returns True when Matcher matches, False otherwise.
@@ -194,6 +179,20 @@ class Matcher(ABC):
         **To be implemented by all Matchers.**
         """
         ...  # pragma: no cover
+
+    @final
+    def _reset_nested_failures(
+        self,
+    ) -> None:
+        """For resetting failure state of child matchers in case of passing due to other Matchers.
+
+        For example in :class:`Or`, it is enough that one child Matcher passes.
+        The matchers tried up to that point should not report failure.
+        After a Matcher reports a success, nested failures get reset automatically.
+
+        It is unlikely that you should ever call this from your tests or custom Matchers yourself.
+        """
+        self.__state.reset_failures()
 
     @final
     def matches(self, other: MatchedType, context: _MatcherContext) -> bool:
@@ -219,13 +218,31 @@ class Matcher(ABC):
 
     @final
     def __repr__(self) -> str:
+        """Textual representation of the Matcher.
+
+        Contains info about failures and failed values
+        """
         return self.__describe()
+
+    def __and__(self, other: Matchable) -> 'Matcher':
+        """Combines several matchers in a similar fashion as :class:`And`"""
+        return _AndOperator(self, other)
+
+    def __or__(self, other: Matchable) -> 'Matcher':
+        """Combines several matchers in a similar fashion as :class:`Or`"""
+        return _OrOperator(self, other)
 
     @final
     def __describe(self) -> str:
+        if self.__name:
+            return f'{self.__name}({self._description()}){self.__status_string()}'
+        else:
+            return f'({self._description()}){self.__status_string()}'
+
+    @final
+    def __status_string(self) -> str:
         failed_value = sequence_or_its_only_member(self.__state.failed_values)
-        status_str = f'[FAILED for {failed_value!r}]' if self.__state.status == _MatcherStatus.FAILED else ''
-        return f'{self.__name}({self._description()}){status_str}'
+        return f'[FAILED for {failed_value!r}]' if self.__state.status == _MatcherStatus.FAILED else ''
 
     @final
     @contextmanager
@@ -292,3 +309,39 @@ class Transformer(ABC):
     @abstractmethod
     def matches(self, matcher: Matchable) -> Matcher:
         ...  # pragma: no cover
+
+
+class _AndOperator(Matcher):
+    def __init__(self, *matchers: Matchable):
+        super().__init__(name=None)
+        self.matchers = matchers
+
+    def _matches(self, other: Any) -> bool:
+        return all(self.nested_match(matcher, other) for matcher in self.matchers)
+
+    def _description(self) -> str:
+        return ' & '.join(map(repr, self.matchers))
+
+    def __and__(self, other: Matchable) -> Matcher:
+        if isinstance(other, _AndOperator):
+            return _AndOperator(*chain(self.matchers, other.matchers))
+        else:
+            return _AndOperator(*self.matchers, other)
+
+
+class _OrOperator(Matcher):
+    def __init__(self, *matchers: Matchable):
+        super().__init__(name=None)
+        self.matchers = matchers
+
+    def _matches(self, other: Any) -> bool:
+        return any(self.nested_match(matcher, other) for matcher in self.matchers)
+
+    def _description(self) -> str:
+        return ' | '.join(map(repr, self.matchers))
+
+    def __or__(self, other: Matchable) -> Matcher:
+        if isinstance(other, _OrOperator):
+            return _OrOperator(*chain(self.matchers, other.matchers))
+        else:
+            return _OrOperator(*self.matchers, other)

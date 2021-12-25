@@ -333,8 +333,7 @@ class IsNotPresentOr(Matcher):
 
 class _First(Matcher):
     def __init__(self, how_many: int, matcher: Matchable):
-        super().__init__()
-        super()._override_name('First')
+        super().__init__(name='First')
         self.how_many = how_many
         self.matcher = matcher
 
@@ -377,8 +376,7 @@ class First(Transformer):
 
 class _Last(Matcher):
     def __init__(self, how_many: int, matcher: Matchable):
-        super().__init__()
-        super()._override_name('Last')
+        super().__init__(name='Last')
         self.how_many = how_many
         self.matcher = matcher
 
@@ -419,8 +417,7 @@ class Last(Transformer):
 
 class _Slice(Matcher):
     def __init__(self, slice_: Union[int, slice], matcher: Matchable) -> None:
-        super().__init__()
-        super()._override_name(f'Slice[{slice_}]')
+        super().__init__(name=f'Slice[{slice_}]')
         self.slice = slice_
         self.matcher = matcher
 
