@@ -146,7 +146,7 @@ class TestMatcher:
 
         or_or_normal = one_or | IsTruthy()
         assert 6 == or_or_normal
-        assert str(or_or_normal) == (EqualTo(5) | IsInstance(int) | IsTruthy())
+        assert str(or_or_normal) == '(EqualTo(5) | IsInstance(int) | IsTruthy())'
 
 
 def test_matcher_in_mock_call_params():
