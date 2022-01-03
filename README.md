@@ -3,8 +3,9 @@
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/pychoir.svg)](https://pypi.python.org/pypi/pychoir/)
 [![GitHub Actions (Tests)](https://github.com/kajaste/pychoir/workflows/Python%20package/badge.svg)](https://github.com/kajaste/pychoir)
 [![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=stable)](https://pychoir.readthedocs.io/en/stable/?badge=latest)
+[![License](https://img.shields.io/pypi/l/pychoir.svg?style=flat)](https://github.com/kajaste/pychoir/blob/main/LICENSE.txt)
 
-Super duper low cognitive overhead matching for Python developers reading or writing tests. Implemented in pure Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8, 3.9 and 3.10. PyPy (3.6, 3.7) works fine too.
+Super-duper low cognitive overhead matching for Python developers reading or writing tests. Implemented fully in modern & typed Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8, 3.9 and 3.10. PyPy (3.6, 3.7) works fine too.
 
 `pychoir` has mostly been developed for use with `pytest`, but nothing prevents from using it in any other test framework (like vanilla `unittest`) or even outside of testing, if you feel like it.
 
@@ -14,7 +15,7 @@ Super duper low cognitive overhead matching for Python developers reading or wri
 * With poetry: `poetry add --dev pychoir`
 
 ## Documentation
-Check out the API Reference on readthedocs for detailed info on all the available Matchers [https://pychoir.readthedocs.io/en/stable/api.html](https://pychoir.readthedocs.io/en/stable/api.html)
+Check out the API Reference on readthedocs for detailed info and examples of all the available Matchers [https://pychoir.readthedocs.io/en/stable/api.html](https://pychoir.readthedocs.io/en/stable/api.html)
 
 ## Why?
 
@@ -47,20 +48,36 @@ assert result == {'some_fields': 'some values'}
 This is where `pychoir` comes in with matchers:
 
 ```python
-from pychoir import LessThan, All, HasLength, IsNoneOr, And, IsInstance
+from pychoir import LessThan, All, HasLength, IsNoneOr, IsInstance
 
 assert thing_under_test() == {
     'number': IsNoneOr(LessThan(3)),
-    'list_of_strings': And(HasLength(5), All(IsInstance(str))),
+    'list_of_strings': HasLength(5) & All(IsInstance(str)),
     'some_fields': 'some values',
 }
 ```
 
-You can also check many things about the same value: for example `And(IsInstance(int), 5)` will make sure that the value is not only equal to 5, but is also an `int` (goodbye to accidental `5.0`).
+It can also be cumbersome to check mocked calls without using matchers:
 
-You can place a matcher almost anywhere where a value can be. **`pychoir` matchers work well inside lists, tuples, dicts, dataclasses, ...** You can also place normal values inside matchers, and they will match as with traditional `==` or `!=`.
+```python
+assert mock.call_args[0][0] < 3
+assert isinstance(mock.call_args[0][1], str)
+assert len(mock.call_args[0][2]) == 3
+```
 
-A core principle is that `pychoir` Matchers are composable and can be used freely in various combinations. For example `[Or(LessThan(3), 5)]` is "equal to" a list with one item, holding a value equal to 5 or any value less than 3.
+but simple and easy when using them:
+
+```python
+from pychoir import LessThan, IsInstance, HasLength
+
+mock.assert_called_with(LessThan(3), IsInstance(str), HasLength(3))
+```
+
+You can also check many things about the same value: for example `IsInstance(int) & 5` will make sure that the value is not only equal to 5, but is also an `int` (goodbye to accidental `5.0`).
+
+You can place a matcher almost anywhere where a value can be. **`pychoir` matchers work well inside lists, tuples, dicts, dataclasses, mock call assertions...** You can also place normal values inside matchers, and they will match as with traditional `==` or `!=`.
+
+A core principle is that `pychoir` Matchers are composable and can be used freely in various combinations. For example `[LessThan(3) | 5]` is "equal to" a list with one item, holding a value equal to 5 or any value less than 3.
 
 ## Can I write custom Matchers of my own
 
@@ -123,7 +140,7 @@ Python has a rather peculiar way of handling equivalence, which allows customizi
 
 ## What is the project status?
 
-`pychoir` has quite a semi-vast range of Matchers built in as well as basic API Reference documenting them. New ideas are still plenty and more can be discussed in [Discussions](https://github.com/kajaste/pychoir/discussions). Documentation will receive updates as well. Most remarkably fancy examples are missing. Making `pychoir` easier to contribute to is also on the list.
+`pychoir` has quite a vast range of Matchers built in as well as basic API Reference documenting them. New ideas are still plenty and more can be discussed in [Discussions](https://github.com/kajaste/pychoir/discussions). Documentation will receive updates as well. Most remarkably fancy examples are missing. Making `pychoir` easier to contribute to is also on the list.
 
 ## Where does the name come from?
 

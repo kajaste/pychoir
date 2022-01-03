@@ -119,11 +119,11 @@ class Matcher(ABC):
     """The baseclass for all Matchers.
 
     :param name:
-        For Matchers whose class name does not match the call that creates them.
+        Only for Matchers whose class name does not match the call that creates them.
         This applies, for example, to Matchers created by :class:`Transformer` s.
 
         For example :class:`_First(Matcher)` (that is created by :class:`First(Transformer)`) uses
-        this method to make its name :code:`'First'` instead of :code:`'_First'` in its textual representation.
+        this to make its name :code:`'First'` instead of :code:`'_First'` in its textual representation.
     """
     def __init__(self, name: Union[DefaultType, Optional[str]] = Default) -> None:
         super().__init__()
@@ -225,11 +225,29 @@ class Matcher(ABC):
         return self.__describe()
 
     def __and__(self, other: Matchable) -> 'Matcher':
-        """Combines several matchers in a similar fashion as :class:`And`"""
+        """Combines several matchers in a similar fashion as :class:`And`
+
+        Usage:
+          >>> from pychoir import IsInstance
+          >>> 5 == IsInstance(int) & 5
+          True
+          >>> 5.0 == IsInstance(int) & 5
+          False
+        """
         return _AndOperator(self, other)
 
     def __or__(self, other: Matchable) -> 'Matcher':
-        """Combines several matchers in a similar fashion as :class:`Or`"""
+        """Combines several matchers in a similar fashion as :class:`Or`
+
+        Usage:
+          >>> from pychoir import StartsWith
+          >>> 'foo' == StartsWith('foo') | StartsWith('bar')
+          True
+          >>> 'bar' == StartsWith('foo') | StartsWith('bar')
+          True
+          >>> 'baz' == StartsWith('foo') | StartsWith('bar')
+          False
+        """
         return _OrOperator(self, other)
 
     @final
