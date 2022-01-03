@@ -6,6 +6,8 @@ from pychoir.core import Matchable, Matcher
 class And(Matcher):
     """A Matcher checking that the compared value matches *all* the passed :class:`Matchable` s.
 
+    Consider using the :code:`&` operator (:func:`Matcher.__and__`) instead: :code:`StartsWith('a') & HasLength(3)`.
+
     :param matchers: The value(s) and/or matcher(s) to compare against.
 
     Usage:
@@ -33,6 +35,8 @@ AllOf = And
 
 class Or(Matcher):
     """A Matcher checking that the compared value matches *at least one of* the passed :class:`Matchable` s.
+
+    Consider using the :code:`|` operator (:func:`Matcher.__or__`) instead: :code:`StartsWith('a') | StartsWith('b')`.
 
     :param matchers: The value(s) and/or matcher(s) to compare against.
 
