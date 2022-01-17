@@ -6,7 +6,7 @@ from pychoir.core import Matcher
 class IsInstance(Matcher):
     """A Matcher checking that the compared object's type matches the passed one.
 
-    :param type_: The expected type of compared values.
+    :param types: The expected type(s) of compared values.
 
     Usage:
       >>> from pychoir import IsInstance
@@ -14,16 +14,18 @@ class IsInstance(Matcher):
       True
       >>> 'foobar' == IsInstance(int)
       False
+      >>> 'foobar' == IsInstance(int, str)
+      True
     """
-    def __init__(self, type_: Type[Any]):
+    def __init__(self, *types: Type[Any]):
         super().__init__()
-        self.type = type_
+        self.types = types
 
     def _matches(self, other: Any) -> bool:
-        return isinstance(other, self.type)
+        return isinstance(other, self.types)
 
     def _description(self) -> str:
-        return self.type.__name__
+        return ', '.join(map(lambda t: t.__name__, self.types))
 
 
 OfType = IsInstance
