@@ -13,7 +13,7 @@ if sys.version_info >= (3, 8):
     from typing import Protocol
 
     class Matchable(Protocol):
-        """Type for a value that can be matched against using the :code:`==` operator (has the :code:`__eq__()` method).
+        """Type for a value that can be matched against using the :code:`==` operator (has the :code:`__eq__` method).
         In the pychoir API, you can typically pass `Matcher` s and/or normal values where `Matchable` s are expected.
         """
         def __eq__(self, other: MatchedType) -> bool:
