@@ -1,7 +1,7 @@
 # type: ignore
 from typing import Optional
 
-_DUMMY_VERSION = '0.0.0-test'
+_DUMMY_VERSION = '0.0.0.dev0'
 
 
 def version_from_package() -> Optional[str]:

@@ -159,7 +159,7 @@ def test_matcher_in_mock_call_params():
     with pytest.raises(AssertionError) as exc_info:
         m.assert_called_once_with(GreaterThan(5))
     if sys.version_info >= (3, 8):
-        assert (str(exc_info.value)
+        assert ("\n".join(line.lstrip() for line in str(exc_info.value).split("\n"))
                 == "expected call not found.\n"
                    "Expected: mock(GreaterThan(5)[FAILED for 5])\n"
                    "Actual: mock(5)")
