@@ -5,7 +5,7 @@
 [![Documentation Status](https://readthedocs.org/projects/pychoir/badge/?version=stable)](https://pychoir.readthedocs.io/en/stable/?badge=latest)
 [![License](https://img.shields.io/pypi/l/pychoir.svg?style=flat)](https://github.com/kajaste/pychoir/blob/main/LICENSE.txt)
 
-Super-duper low cognitive overhead matching for Python developers reading or writing tests. Implemented fully in modern & typed Python, without any dependencies. Runs and passes its tests on 3.6, 3.7, 3.8, 3.9, 3.10 and 3.11. PyPy works fine too.
+Super-duper low cognitive overhead matching for Python developers reading or writing tests. Implemented fully in modern & typed Python, without any dependencies. Runs and passes its tests on most Pythons after 3.6. PyPy works fine too.
 
 `pychoir` has mostly been developed for use with `pytest`, but nothing prevents from using it in any other test framework (like vanilla `unittest`) or even outside of testing, if you feel like it.
 
@@ -14,6 +14,7 @@ Super-duper low cognitive overhead matching for Python developers reading or wri
 * With pipenv: `pipenv install --dev pychoir`
 * With poetry: `poetry add --dev pychoir`
 * With PDM: `pdm add -dG test pychoir`
+* With uv: `uv add --dev pychoir`
 
 ## Documentation
 Check out the API Reference on readthedocs for detailed info and examples of all the available Matchers [https://pychoir.readthedocs.io/en/stable/api.html](https://pychoir.readthedocs.io/en/stable/api.html)

@@ -70,4 +70,4 @@ upload:
 	twine upload dist/*
 .PHONY: upload
 
-clean: test_clean typecheck_clean docs_clean package_clean
+clean: test_clean typecheck_clean docs_clean package_clean tox_clean
