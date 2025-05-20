@@ -4,16 +4,12 @@ from typing import Optional
 _DUMMY_VERSION = '0.0.0.dev0'
 
 
-def version_from_pyproject() -> Optional[str]:
+def version_from_package() -> Optional[str]:
     try:
-        import tomli
-        from pathlib import Path
-        path = Path(__file__).parent.parent / "pyproject.toml"
-        with path.open("rb") as f:
-            pyproject = tomli.load(f)
-        return pyproject["project"]["version"]
+        from ._version import version
+        return version
     except ImportError:
         return None
 
 
-version = version_from_pyproject() or _DUMMY_VERSION
+version = version_from_package() or _DUMMY_VERSION

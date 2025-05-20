@@ -1,3 +1,4 @@
+.DS_Store
 .coverage
 .idea/
 .tox
@@ -5,3 +6,4 @@ __pycache__
 build/
 dist/
 pychoir.egg-info/
+pychoir/_version.py

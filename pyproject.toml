@@ -1,6 +1,6 @@
 [project]
 name = "pychoir"
-version = "0.0.29"
+dynamic = ["version"]
 description = "Test Matchers for humans"
 readme = "README.md"
 authors = [
@@ -31,17 +31,22 @@ classifiers=[
 source = "https://github.com/kajaste/pychoir"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "pychoir/_version.py"
 
 [dependency-groups]
 dev = [
-    "mypy",
     "flake8",
     "isort",
+    "mypy",
     "pytest",
     "pytest-cov",
-    "tomli",
-    "tox",
     "sphinx",
+    "tox",
 ]
