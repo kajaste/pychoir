@@ -56,18 +56,17 @@ tox_clean: package_clean typecheck_clean test_clean
 .PHONY: tox_clean
 
 package: package_clean
-	python setup.py sdist bdist_wheel
+	uv build
 .PHONY: package
 
 package_clean:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf pychoir.egg-info/
-	rm -f pychoir/_version.py
 .PHONY: package_clean
 
 upload:
-	twine upload dist/*
+	uv publish
 .PHONY: upload
 
 clean: test_clean typecheck_clean docs_clean package_clean tox_clean
