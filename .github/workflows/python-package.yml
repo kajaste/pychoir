@@ -54,9 +54,9 @@ jobs:
         python-version: '3.13'
     - name: Install dependencies
       run: |
-        python3.13 -m pip install --upgrade pip pipenv
-        pipenv install --dev --python 3.13
+        python3.13 -m pip install --upgrade pip uv
+        uv sync --dev
     - name: Run development checks
-      run: pipenv run make
+      run: uv run make
     - name: Run packaging & run checks on older Pythons
-      run: pipenv run tox
+      run: uv run tox
