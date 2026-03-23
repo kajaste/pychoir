@@ -52,9 +52,13 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.13'
+    - name: Set up Python 3.14
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.14'
     - name: Install dependencies
       run: |
-        python3.13 -m pip install --upgrade pip uv
+        python3.14 -m pip install --upgrade pip uv
         uv sync --dev
     - name: Run development checks
       run: uv run make
