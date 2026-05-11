@@ -43,7 +43,7 @@ class TestMatcher:
         instance = self._TestMatcher(True)
         assert instance.as_(int) is cast(int, instance)
         assert type(instance.as_(int)) is cast(int, self._TestMatcher)
-        assert instance.as_(int) == 5
+        assert instance.as_(int) == 5  # type:ignore[unreachable,unused-ignore]
 
     def test_eq(self):
         assert self._TestMatcher(True) == 1
