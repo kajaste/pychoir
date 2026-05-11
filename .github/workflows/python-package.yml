@@ -56,10 +56,11 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.14'
-    - name: Install dependencies
+    - name: Check lock & install locked dependencies
       run: |
         python3.14 -m pip install --upgrade pip uv
-        uv sync --dev
+        uv lock --check
+        uv sync --dev --frozen
     - name: Run development checks
       run: uv run make
     - name: Run packaging & run checks on older Pythons
