@@ -8,12 +8,11 @@ authors = [
 ]
 keywords = ["testing", "matchers", "mock", "error-handling", "exception"]
 license = {text = "MIT License"}
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 dependencies = []
 
 classifiers=[
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
